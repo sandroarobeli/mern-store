@@ -1,19 +1,28 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
+
 /.pnp
 .pnp.js
 
 # testing
 /coverage
 
+# auxillary data and api for seeding
+/src/auxillary
+# check the path before implementing this!!! /pages/api/seed.js
+# IMPLEMENT CLIENT DIRECTORY VIA CREATE-REACT-APP!!!
+
+# local env files
+.env*.local
+.env
+
 # production
 /build
 
 # misc
 .DS_Store
-.env
 .env.local
 .env.development.local
 .env.test.local
