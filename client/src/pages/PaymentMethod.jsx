@@ -38,7 +38,6 @@ export default function PaymentMethod() {
     if (!localPaymentMethod) {
       return setModalOpen(true);
     }
-    console.log("dispatch: ", localPaymentMethod);
     dispatch(savePaymentMethod(localPaymentMethod));
     // Redirection to final place-order screen
     navigate("/place-order");

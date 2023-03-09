@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const userRoutes = require("./routes/users");
 const productRoutes = require("./routes/products");
+const orderRoutes = require("./routes/orders");
 
 // Create the server app and designate the port
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 // Register individual custom routers
 app.use("/api/users", userRoutes); // This url triggers userRoutes
 app.use("/api/products", productRoutes); // This url triggers productRoutes
+app.use("/api/orders", orderRoutes); // This url triggers orderRoutes
 
 // Handling errors for unsupported routes
 app.use((req, res, next) => {

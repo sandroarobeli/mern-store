@@ -14,8 +14,6 @@ export default function Product() {
     }),
   });
 
-  // console.log("product", product); // test
-
   useEffect(() => {
     if (!product) {
       return navigate("/");
