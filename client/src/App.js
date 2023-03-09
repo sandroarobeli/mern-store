@@ -13,6 +13,8 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import ShippingAddress from "./pages/ShippingAddress";
 import PaymentMethod from "./pages/PaymentMethod";
+import PlaceOrder from "./pages/PlaceOrder";
+import Order from "./pages/Order";
 import NotFound from "./pages/NotFound";
 import Inactivity from "./pages/Inactivity";
 import {
@@ -73,6 +75,8 @@ function App() {
         {token && (
           <Route path="payment-method" exact element={<PaymentMethod />} />
         )}
+        {token && <Route path="place-order" exact element={<PlaceOrder />} />}
+        {token && <Route path="order/:id" exact element={<Order />} />}
         <Route path="inactivity" exact element={<Inactivity />} />
         <Route path="*" element={<NotFound />} />
         {/*<Route path="*" element={<Navigate replace to="" />} /> This is Catch all*/}

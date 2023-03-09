@@ -12,7 +12,7 @@ router.post(
   "/login",
   [
     check("email").not().isEmpty().trim().escape(),
-    check("password").not().isEmpty(),
+    check("password").not().isEmpty().trim().escape(),
   ],
   login
 );
