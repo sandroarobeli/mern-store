@@ -78,7 +78,6 @@ export default function ShippingAddress() {
               errors.address ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="address"
-            autoFocus
             {...register("address", {
               required: "Please enter address",
               minLength: {
@@ -99,7 +98,6 @@ export default function ShippingAddress() {
               errors.city ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="city"
-            autoFocus
             {...register("city", {
               required: "Please enter city",
             })}
@@ -146,7 +144,6 @@ export default function ShippingAddress() {
               errors.zip ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="zip"
-            autoFocus
             {...register("zip", {
               required: "Please enter zip code",
               validate: (value) =>
@@ -166,7 +163,6 @@ export default function ShippingAddress() {
               errors.phone ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="phone"
-            autoFocus
             {...register("phone", {
               required: "Please enter a phone number",
               onChange: (e) =>

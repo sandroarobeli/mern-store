@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const { OAuth2Client } = require("google-auth-library");
 require("dotenv").config();
 
@@ -19,7 +20,7 @@ async function verifyGoogleToken(token) {
   }
 }
 
-async function googleLogin(req, res, next) {
+async function googleRegister(req, res, next) {
   const { credential } = req.body;
 
   try {
@@ -34,29 +35,35 @@ async function googleLogin(req, res, next) {
       const existingUser = await prisma.user.findUnique({
         where: { email: profile?.email },
       });
-
-      if (!existingUser) {
-        return next(new Error("You are not registered. Please sign up"));
+      if (existingUser) {
+        return next(new Error("The account already exists. Please Login."));
       }
+
+      const newUser = await prisma.user.create({
+        data: {
+          name: profile?.given_name,
+          email: profile?.email,
+          password: bcrypt.hashSync("123456"),
+        },
+      });
 
       let token;
       try {
-        token = jwt.sign(
-          { userId: existingUser.id },
-          process.env.SECRET_TOKEN_KEY,
-          {
-            expiresIn: "2h",
-          }
-        );
+        token = jwt.sign({ userId: newUser.id }, process.env.SECRET_TOKEN_KEY, {
+          expiresIn: "2h",
+        });
       } catch (error) {
         return next(new Error("Registration failed. Please try again"));
       }
 
       res.status(201).json({
-        ...convertDocumentToObject(existingUser),
-        // Since this user was created via google, if it has an image we attach it
+        ...convertDocumentToObject(newUser),
+        // Since this user comes from google and not from existingUser,
+        // what we call image is called picture in google profile
+        // So unlike googleLogin controller, I use picture here
+        // Thus, if it has a picture we attach it
         // Here in the format it was originally created. otherwise we attach "NA"
-        image: existingUser?.image ? existingUser.image : "NA",
+        image: profile?.picture ? profile.picture : "NA",
         token: token,
         // Sets time to 15 Seconds for TESTING
         // expiration: new Date().getTime() + 1000 * 15
@@ -65,8 +72,8 @@ async function googleLogin(req, res, next) {
       });
     }
   } catch (error) {
-    return next(new Error(`Login failed: ${error?.message || error}`));
+    return next(new Error(`Registration failed: ${error?.message || error}`));
   }
 }
 
-module.exports = googleLogin;
+module.exports = googleRegister;

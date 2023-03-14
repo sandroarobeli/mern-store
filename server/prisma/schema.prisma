@@ -20,7 +20,7 @@ model User {
   isAdmin   Boolean @default(false)
   orders Order[] 
   createdAt DateTime @default(now())
-  // updatedAt DateTime @updatedAt // RESTORE
+  updatedAt DateTime @updatedAt 
 }
 
 model Product {
@@ -55,9 +55,7 @@ model Order {
   owner User                      @relation(fields: [ownerId], references: [id])
   ownerId                         String  @db.ObjectId 
 }
-// A. DELETE USERS AND RECTREATE THEM WITH UPDATED AT FIELDS AVAILABLE
-// 
-// B.
+
 // ADDRESS PAID AT AND DELIVERED AT IF AND AS SOON AS THE COURSE GETS THERE.
 // OTHERWISE, SWITCH BACK TO DEFAULT FOR PAID AT (THERE IS NO CASH OPTION)
 // AND SOME DEFAULT IN THE FUTURE FOR DELIVERED AT  
