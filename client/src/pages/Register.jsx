@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
+import { clearError, selectToken } from "../redux/userSlice";
 import {
-  // login,
-  clearError,
-  // selectUserStatus,
-  selectToken,
-} from "../redux/userSlice";
-import {
-  useGoogleLoginMutation,
-  useCredentialLoginMutation,
+  useCredentialRegisterMutation,
+  useGoogleRegisterMutation,
 } from "../redux/apiSlice";
 import DialogModal from "../components/DialogModal";
 
-export default function Login() {
+export default function Register() {
   const dispatch = useDispatch();
   const token = useSelector(selectToken);
   const navigate = useNavigate();
@@ -26,9 +21,9 @@ export default function Login() {
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [googleLogin, { data: googleUser }] = useGoogleLoginMutation();
-  const [credentialLogin, { data: credentialUser, isLoading }] =
-    useCredentialLoginMutation();
+  const [googleRegister, { data: googleUser }] = useGoogleRegisterMutation();
+  const [credentialRegister, { data: credentialUser, isLoading }] =
+    useCredentialRegisterMutation();
 
   console.log("googleUser", googleUser); // test
   console.log("credentialUser", credentialUser); // test
@@ -37,35 +32,32 @@ export default function Login() {
     handleSubmit,
     register,
     formState: { errors },
+    getValues,
     reset,
   } = useForm();
-  // IF LOGGED IN (THERE IS ACTIVE SESSION), ==> REDIRECT TO whence (IF COMING FROM CART),
-  // OTHERWISE, ==> REDIRECT TO HOME (IF COMING FROM SOMEWHERE ELSE) LIKE
-  // IF I WENT TO THE STORE AND INSTEAD OF BROWSING FIRST, WENT STRAIGHT TO LOGIN PAGE
-  // NOTE: HANDLES CREDENTIALS LOGIN
+
   useEffect(() => {
     if (token) {
-      console.log("session token: ", token);
-      navigate(whence || "/"); // OR router.push(whence || '/')
+      navigate(whence || "/");
     }
   }, [navigate, token, whence]);
 
-  const submitWithCredentialsHandler = async ({ email, password }) => {
-    if (email && password && !isLoading) {
+  const submitWithCredentialsHandler = async ({ name, email, password }) => {
+    if (name && email && password && !isLoading) {
       try {
-        await credentialLogin({ email, password }).unwrap();
+        await credentialRegister({ name, email, password }).unwrap();
       } catch (error) {
+        console.log(error); // test
         setErrorMessage(error.data.message); // Local Error state get populated by Redux error
         setModalOpen(true);
       }
     }
   };
-  // NOTE: action.payload === error
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleGoogleLogin = async (googleResponse) => {
+  const handleGoogleRegister = async (googleResponse) => {
     try {
-      const userData = await googleLogin({
+      const userData = await googleRegister({
         credential: googleResponse.credential,
       }).unwrap();
       // Non status-500 error. for example, google user trying in is not
@@ -73,11 +65,7 @@ export default function Login() {
       if (!userData) {
         throw new Error(userData.message);
       }
-      // await credentialLogin({
-      //   email: userData.email,
-      //   password: bcrypt.hashSync("123456"), // some default password for google logged in users
-      // }).unwrap();
-      // Status-500 error presumably
+      console.log("google register userData", userData); // test
     } catch (error) {
       setErrorMessage(error.data.message); // Local Error state get populated by Redux error
       setModalOpen(true);
@@ -89,14 +77,14 @@ export default function Login() {
     if (window.google) {
       google.accounts.id.initialize({
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        callback: handleGoogleLogin,
+        callback: handleGoogleRegister,
       });
 
-      google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      google.accounts.id.renderButton(document.getElementById("signUpDiv"), {
         type: "standard",
         theme: "outline",
         size: "large",
-        text: "signin_with",
+        text: "signup_with",
         shape: "rectangular",
         logo_alignment: "center",
         width: 250,
@@ -104,7 +92,7 @@ export default function Login() {
 
       // google.accounts.id.prompt()
     }
-  }, [handleGoogleLogin]);
+  }, [handleGoogleRegister]);
 
   const handleErrorClear = () => {
     setModalOpen(false);
@@ -119,7 +107,24 @@ export default function Login() {
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitWithCredentialsHandler)}
       >
-        <h1 className="mb-4 text-xl">Login</h1>
+        <h1 className="mb-4 text-xl">Create Account</h1>
+        <div className="mb-4">
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            className={`w-full focus:ring ${
+              errors.name ? "ring-red-500" : "ring-indigo-300"
+            }`}
+            id="name"
+            autoFocus
+            {...register("name", {
+              required: "Please enter name",
+            })}
+          />
+          {errors.name && (
+            <div className="text-red-500">{errors.name.message}</div>
+          )}
+        </div>
         <div className="mb-4">
           <label htmlFor="email">Email</label>
           <input
@@ -128,7 +133,6 @@ export default function Login() {
               errors.email ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="email"
-            autoFocus // First field gets autoFocus
             {...register("email", {
               required: "Please enter email",
               pattern: {
@@ -161,31 +165,50 @@ export default function Login() {
             <div className="text-red-500">{errors.password.message}</div>
           )}
         </div>
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              onChange={() =>
-                setPasswordVisible((passwordVisible) => !passwordVisible)
-              }
-              id="showPassword"
-              className="w-5 h-5 mr-2 cursor-pointer"
-            />{" "}
-            <label htmlFor="showPassword">Show password</label>
-          </div>
-          <Link to="/passwordResetEmail" className="text-xs">
-            Forgot password?
-          </Link>
+        <div className="mb-4">
+          <label htmlFor="confirmPassword">Confirm Password</label>
+          <input
+            type={`${passwordVisible ? "text" : "password"}`}
+            className={`w-full focus:ring ${
+              errors.confirmPassword ? "ring-red-500" : "ring-indigo-300"
+            }`}
+            id="confirmPassword"
+            {...register("confirmPassword", {
+              required: "Please confirm password",
+              validate: (value) => value === getValues("password"),
+              minLength: {
+                value: 6,
+                message: "Password must be minimum 6 characters long",
+              },
+            })}
+          />
+          {errors.confirmPassword && (
+            <div className="text-red-500">{errors.confirmPassword.message}</div>
+          )}
+          {errors.confirmPassword &&
+            errors.confirmPassword.type === "validate" && (
+              <div className="text-red-500">Passwords do not match</div>
+            )}
+        </div>
+        <div className="mb-4 flex items-center">
+          <input
+            type="checkbox"
+            onChange={() =>
+              setPasswordVisible((passwordVisible) => !passwordVisible)
+            }
+            id="showPassword"
+            className="w-5 h-5 mr-2 cursor-pointer"
+          />{" "}
+          <label htmlFor="showPassword">Show password</label>
         </div>
         <div className="mb-4">
           <button className="primary-button w-[250px]" disabled={isLoading}>
-            {isLoading ? "Please wait.." : "Login"}
+            {isLoading ? "Please wait.." : "Register"}
           </button>
         </div>
         <div className="mb-4">
-          Don&apos;t have an account? &nbsp;
-          {/* If we end up registering via page other than home, we return to that page */}
-          <Link to={`/register?redirect=${whence || "/"}`}>Register</Link>
+          Already have an account? &nbsp;
+          <Link to="/login">Login</Link>
         </div>
       </form>
       <div className="mx-auto max-w-screen-md mb-4 flex justify-between items-center">
@@ -194,15 +217,21 @@ export default function Login() {
         <span className="h-0.5 w-1/2 ml-3 bg-gray-200"></span>
       </div>
       <div className="mx-auto mt-8 max-w-screen-md">
-        <button id="signInDiv" data-text="signin_with"></button>
+        <button id="signUpDiv" data-text="signup_with"></button>
       </div>
       <DialogModal
         isOpen={modalOpen}
         onClose={handleErrorClear}
-        title="Login Error"
+        title="Registration Error"
         description={errorMessage}
         className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
       />
     </>
   );
 }
+
+/* TEMPLATE FOR PASSWORD RESET
+Check your inbox // h3  Deletemelater69
+We've sent an email with a link to reset your password. If you don't receive an email within a few minutes, then check your spam and junk folders. // p
+
+ */

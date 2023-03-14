@@ -11,6 +11,7 @@ import HomePage from "./pages/Home";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import ShippingAddress from "./pages/ShippingAddress";
 import PaymentMethod from "./pages/PaymentMethod";
 import PlaceOrder from "./pages/PlaceOrder";
@@ -69,6 +70,7 @@ function App() {
         <Route path="product/:slug" exact element={<Product />} />
         <Route path="cart" exact element={<Cart />} />
         <Route path="login" exact element={<Login />} />
+        <Route path="register" exact element={<Register />} />
         {token && (
           <Route path="shipping-address" exact element={<ShippingAddress />} />
         )}

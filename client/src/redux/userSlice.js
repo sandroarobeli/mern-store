@@ -82,10 +82,93 @@ const userSlice = createSlice({
         }
       )
       .addMatcher(
-        // matchFulfilled not needed here, because when google credentials are
-        // successfully generated, regular login takes over and is updated by
-        // credentialLogin.matchFulfilled login above. As for errors we deal with it here
+        apiSlice.endpoints.googleLogin.matchFulfilled,
+        (state, action) => {
+          state.user.id = action.payload.id;
+          state.user.name = action.payload.name;
+          state.user.email = action.payload.email;
+          state.user.image = action.payload.image;
+          state.user.isAdmin = action.payload.isAdmin;
+          state.user.token = action.payload.token;
+          state.user.tokenExpiration = action.payload.expiration;
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id: action.payload.id,
+              name: action.payload.name,
+              email: action.payload.email,
+              image: action.payload.image,
+              isAdmin: action.payload.isAdmin,
+              token: action.payload.token,
+              tokenExpiration: state.user.tokenExpiration.toString(),
+            })
+          );
+        }
+      )
+      .addMatcher(
         apiSlice.endpoints.googleLogin.matchRejected,
+        (state, action) => {
+          state.error = action.payload.data.message; // CUSTOM
+        }
+      )
+      .addMatcher(
+        apiSlice.endpoints.credentialRegister.matchFulfilled,
+        (state, action) => {
+          state.user.id = action.payload.id;
+          state.user.name = action.payload.name;
+          state.user.email = action.payload.email;
+          state.user.image = action.payload.image;
+          state.user.isAdmin = action.payload.isAdmin;
+          state.user.token = action.payload.token;
+          state.user.tokenExpiration = action.payload.expiration;
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id: action.payload.id,
+              name: action.payload.name,
+              email: action.payload.email,
+              image: action.payload.image,
+              isAdmin: action.payload.isAdmin,
+              token: action.payload.token,
+              tokenExpiration: state.user.tokenExpiration.toString(),
+            })
+          );
+        }
+      )
+      .addMatcher(
+        apiSlice.endpoints.credentialRegister.matchRejected,
+        (state, action) => {
+          state.error = action.payload.data.message; // CUSTOM
+        }
+      )
+      .addMatcher(
+        apiSlice.endpoints.googleRegister.matchFulfilled,
+        (state, action) => {
+          state.user.id = action.payload.id;
+          state.user.name = action.payload.name;
+          state.user.email = action.payload.email;
+          state.user.image = action.payload.image;
+          state.user.isAdmin = action.payload.isAdmin;
+          state.user.token = action.payload.token;
+          state.user.tokenExpiration = action.payload.expiration;
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              id: action.payload.id,
+              name: action.payload.name,
+              email: action.payload.email,
+              image: action.payload.image,
+              isAdmin: action.payload.isAdmin,
+              token: action.payload.token,
+              tokenExpiration: state.user.tokenExpiration.toString(),
+            })
+          );
+        }
+      )
+      .addMatcher(
+        apiSlice.endpoints.googleRegister.matchRejected,
         (state, action) => {
           state.error = action.payload.data.message; // CUSTOM
         }
