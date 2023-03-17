@@ -108,6 +108,7 @@ export default function Login() {
 
   const handleErrorClear = () => {
     setModalOpen(false);
+    setPasswordVisible(false);
     dispatch(clearError());
     setErrorMessage("");
     reset();
@@ -173,7 +174,7 @@ export default function Login() {
             />{" "}
             <label htmlFor="showPassword">Show password</label>
           </div>
-          <Link to="/passwordResetEmail" className="text-xs">
+          <Link to="/password-reset-email" className="text-xs">
             Forgot password?
           </Link>
         </div>
@@ -200,7 +201,10 @@ export default function Login() {
         isOpen={modalOpen}
         onClose={handleErrorClear}
         title="Login Error"
-        description={errorMessage}
+        description={
+          errorMessage ||
+          "An error ocurred while submitting your request. Please try again later"
+        }
         className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
       />
     </>

@@ -18,6 +18,10 @@ import PlaceOrder from "./pages/PlaceOrder";
 import Order from "./pages/Order";
 import NotFound from "./pages/NotFound";
 import Inactivity from "./pages/Inactivity";
+import PasswordResetEmail from "./pages/PasswordResetEmail";
+import PasswordResetForm from "./pages/PasswordResetForm";
+import ExpiredPasswordLink from "./pages/ExpiredPasswordLink";
+import Confirmation from "./pages/Confirmation";
 import {
   selectToken,
   selectTokenExpiration,
@@ -80,6 +84,22 @@ function App() {
         {token && <Route path="place-order" exact element={<PlaceOrder />} />}
         {token && <Route path="order/:id" exact element={<Order />} />}
         <Route path="inactivity" exact element={<Inactivity />} />
+        <Route
+          path="password-reset-email"
+          exact
+          element={<PasswordResetEmail />}
+        />
+        <Route path="confirmation" exact element={<Confirmation />} />
+        <Route
+          path="password-reset-form"
+          exact
+          element={<PasswordResetForm />}
+        />
+        <Route
+          path="expired-password-link"
+          exact
+          element={<ExpiredPasswordLink />}
+        />
         <Route path="*" element={<NotFound />} />
         {/*<Route path="*" element={<Navigate replace to="" />} /> This is Catch all*/}
       </Routes>

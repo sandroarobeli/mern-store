@@ -3,7 +3,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // Define our single API slice object
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:5000/api" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${process.env.REACT_APP_SERVER_DOMAIN}/api`,
+  }),
   tagTypes: ["Product"],
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -45,6 +47,25 @@ export const apiSlice = createApi({
         url: "/users/google-register",
         method: "POST",
         body: initialGoogleCredential,
+      }),
+    }),
+    passwordResetEmail: builder.mutation({
+      query: ({ email }) => ({
+        url: "/users/reset-email",
+        method: "POST",
+        body: {
+          email: email,
+        },
+      }),
+    }),
+    updatePassword: builder.mutation({
+      query: ({ email, password }) => ({
+        url: "/users/update-password",
+        method: "PATCH",
+        body: {
+          email: email,
+          password: password,
+        },
       }),
     }),
     placeOrder: builder.mutation({
@@ -90,6 +111,8 @@ export const {
   useCredentialLoginMutation,
   useGoogleRegisterMutation,
   useCredentialRegisterMutation,
+  usePasswordResetEmailMutation,
+  useUpdatePasswordMutation,
   usePlaceOrderMutation,
   useGetOrderByIdQuery,
 } = apiSlice;

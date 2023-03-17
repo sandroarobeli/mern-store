@@ -172,6 +172,18 @@ const userSlice = createSlice({
         (state, action) => {
           state.error = action.payload.data.message; // CUSTOM
         }
+      )
+      .addMatcher(
+        apiSlice.endpoints.passwordResetEmail.matchRejected,
+        (state, action) => {
+          state.error = action.payload.data.message; // CUSTOM
+        }
+      )
+      .addMatcher(
+        apiSlice.endpoints.updatePassword.matchRejected,
+        (state, action) => {
+          state.error = action.payload.data.message; // CUSTOM
+        }
       );
   },
 });
@@ -182,6 +194,7 @@ export const { clearError, logout, autoLogin } = userSlice.actions;
 // Exports individual selectors
 export const selectUserName = (state) => state.user.user.name;
 export const selectUserId = (state) => state.user.user.id;
+export const selectUserEmail = (state) => state.user.user.email;
 export const selectUserImage = (state) => state.user.user.image;
 export const selectUserAdmin = (state) => state.user.user.isAdmin;
 export const selectToken = (state) => state.user.user.token;

@@ -5,6 +5,9 @@ const login = require("../controllers/users/login");
 const googleLogin = require("../controllers/users/googleLogin");
 const register = require("../controllers/users/register");
 const googleRegister = require("../controllers/users/googleRegister");
+const resetEmail = require("../controllers/users/resetEmail");
+const passwordResetLinkValidate = require("../controllers/users/passwordResetLinkValidate");
+const updatePassword = require("../controllers/users/updatePassword");
 
 // Initializing the router object
 const router = express.Router();
@@ -35,5 +38,26 @@ router.post(
 
 // Register a User with Google Register
 router.post("/google-register", googleRegister);
+
+// Generate an email with the link to reset User password
+router.post(
+  "/reset-email",
+  check("email").not().isEmpty().isEmail().trim().escape(),
+  resetEmail
+);
+
+// Validate time sensitive link to password reset page
+router.get(
+  "/password-reset-link-validate/:emailToken",
+  passwordResetLinkValidate
+);
+
+// Update User password
+router.patch(
+  "/update-password",
+  check("email").not().isEmpty().isEmail().trim().escape(),
+  check("password").not().isEmpty().trim().escape(),
+  updatePassword
+);
 
 module.exports = router;

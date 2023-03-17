@@ -1,32 +1,21 @@
-import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-import { clearError, selectToken } from "../redux/userSlice";
-import {
-  useCredentialRegisterMutation,
-  useGoogleRegisterMutation,
-} from "../redux/apiSlice";
+import { useUpdatePasswordMutation } from "../redux/apiSlice";
+import { clearError } from "../redux/userSlice";
 import DialogModal from "../components/DialogModal";
 
-export default function Register() {
+export default function PasswordResetForm() {
   const dispatch = useDispatch();
-  const token = useSelector(selectToken);
   const navigate = useNavigate();
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const whence = params.get("redirect");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [googleRegister, { data: googleUser }] = useGoogleRegisterMutation();
-  const [credentialRegister, { data: credentialUser, isLoading }] =
-    useCredentialRegisterMutation();
-
-  console.log("googleUser", googleUser); // test
-  console.log("credentialUser", credentialUser); // test
+  const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
 
   const {
     handleSubmit,
@@ -36,16 +25,12 @@ export default function Register() {
     reset,
   } = useForm();
 
-  useEffect(() => {
-    if (token) {
-      navigate(whence || "/");
-    }
-  }, [navigate, token, whence]);
-
-  const submitWithCredentialsHandler = async ({ name, email, password }) => {
-    if (name && email && password && !isLoading) {
+  const updatePasswordHandler = async ({ email, password }) => {
+    if (email && password) {
       try {
-        await credentialRegister({ name, email, password }).unwrap();
+        await updatePassword({ email, password }).unwrap();
+        toast.success("Update Successful!");
+        navigate("/login"); // test
       } catch (error) {
         console.log(error); // test
         setErrorMessage(error.data.message); // Local Error state get populated by Redux error
@@ -53,46 +38,6 @@ export default function Register() {
       }
     }
   };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleGoogleRegister = async (googleResponse) => {
-    try {
-      const userData = await googleRegister({
-        credential: googleResponse.credential,
-      }).unwrap();
-      // Non status-500 error. for example, google user trying in is not
-      // in the DB and gets prompted to sign up
-      if (!userData) {
-        throw new Error(userData.message);
-      }
-      console.log("google register userData", userData); // test
-    } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
-      setModalOpen(true);
-    }
-  };
-
-  useEffect(() => {
-    /* global google */
-    if (window.google) {
-      google.accounts.id.initialize({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        callback: handleGoogleRegister,
-      });
-
-      google.accounts.id.renderButton(document.getElementById("signUpDiv"), {
-        type: "standard",
-        theme: "outline",
-        size: "large",
-        text: "signup_with",
-        shape: "rectangular",
-        logo_alignment: "center",
-        width: 250,
-      });
-
-      // google.accounts.id.prompt()
-    }
-  }, [handleGoogleRegister]);
 
   const handleErrorClear = () => {
     setModalOpen(false);
@@ -106,28 +51,11 @@ export default function Register() {
     <>
       <form
         className="mx-auto max-w-screen-md"
-        onSubmit={handleSubmit(submitWithCredentialsHandler)}
+        onSubmit={handleSubmit(updatePasswordHandler)}
       >
-        <h1 className="mb-4 text-xl">Create Account</h1>
+        <h1 className="mb-4 text-xl">Update Password</h1>
         <div className="mb-4">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            className={`w-full focus:ring ${
-              errors.name ? "ring-red-500" : "ring-indigo-300"
-            }`}
-            id="name"
-            autoFocus
-            {...register("name", {
-              required: "Please enter name",
-            })}
-          />
-          {errors.name && (
-            <div className="text-red-500">{errors.name.message}</div>
-          )}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Current Email</label>
           <input
             type="email"
             className={`w-full focus:ring ${
@@ -147,13 +75,14 @@ export default function Register() {
           )}
         </div>
         <div className="mb-4">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">New Password</label>
           <input
             type={`${passwordVisible ? "text" : "password"}`}
             className={`w-full focus:ring ${
               errors.password ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="password"
+            autoFocus
             {...register("password", {
               required: "Please enter password",
               minLength: {
@@ -167,7 +96,7 @@ export default function Register() {
           )}
         </div>
         <div className="mb-4">
-          <label htmlFor="confirmPassword">Confirm Password</label>
+          <label htmlFor="confirmPassword">Confirm New Password</label>
           <input
             type={`${passwordVisible ? "text" : "password"}`}
             className={`w-full focus:ring ${
@@ -204,26 +133,14 @@ export default function Register() {
         </div>
         <div className="mb-4">
           <button className="primary-button w-[250px]" disabled={isLoading}>
-            {isLoading ? "Please wait.." : "Register"}
+            {isLoading ? "Updating.." : "Update"}
           </button>
         </div>
-        <div className="mb-4">
-          Already have an account? &nbsp;
-          <Link to="/login">Login</Link>
-        </div>
       </form>
-      <div className="mx-auto max-w-screen-md mb-4 flex justify-between items-center">
-        <span className="h-0.5 w-1/2 mr-3 bg-gray-200"></span>
-        <span>or</span>
-        <span className="h-0.5 w-1/2 ml-3 bg-gray-200"></span>
-      </div>
-      <div className="mx-auto mt-8 max-w-screen-md">
-        <button id="signUpDiv" data-text="signup_with"></button>
-      </div>
       <DialogModal
         isOpen={modalOpen}
         onClose={handleErrorClear}
-        title="Registration Error"
+        title="Submission Error"
         description={
           errorMessage ||
           "An error ocurred while submitting your request. Please try again later"
