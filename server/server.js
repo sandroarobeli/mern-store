@@ -10,12 +10,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Register middleware
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-    methods: "GET,POST,PATCH,DELETE,OPTIONS",
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["http://localhost:3000"],
+//     methods: "GET,POST,PATCH, DELETE,OPTIONS",
+//   })
+// );
+app.use(cors()); // test
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
