@@ -1,8 +1,9 @@
 const express = require("express");
 
+const checkAuthorization = require("../utils/checkAuthorization");
 const placeOrder = require("../controllers/orders/placeOrder");
 const getOrderById = require("../controllers/orders/getOrderById");
-const checkAuthorization = require("../utils/checkAuthorization");
+const updatePaidStatus = require("../controllers/orders/updatePaidStatus");
 
 // Initializing the router object
 const router = express.Router();
@@ -13,6 +14,8 @@ router.post("/place-order", checkAuthorization, placeOrder);
 // Retrieve an order by its id. Privileged, requires authorization
 router.get("/:orderId", checkAuthorization, getOrderById);
 
+// Update order paid status. Privileged, requires authorization
+router.patch("/:orderId/pay", checkAuthorization, updatePaidStatus);
 // NOTE: WHEN RETRIEVING ALL THE ORDERS BY A USER, GET IT SENT VIA PRISMA.USER
 // AS OPPOSED TO PRISMA.ORDER
 module.exports = router;

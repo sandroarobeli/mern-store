@@ -1,34 +1,75 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux"; // , useDispatch
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 import { selectToken } from "../redux/userSlice";
-import { useGetOrderByIdQuery } from "../redux/apiSlice";
-// import { selectShippingAddress } from "../redux/cartSlice";
+import {
+  useGetOrderByIdQuery,
+  useUpdatePaidStatusMutation,
+} from "../redux/apiSlice";
+
+import PaypalButton from "../components/PaypalButton";
 import Spinner from "../components/Spinner";
+import DialogModal from "../components/DialogModal";
 
 export default function Order() {
-  // const dispatch = useDispatch()
   const token = useSelector(selectToken);
-  // const shippingAddress = useSelector(selectShippingAddress);
-
   const { id } = useParams();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const {
     data: order,
     isLoading,
     // isFetching,
-    isSuccess,
+    // isSuccess,
     isError,
-    error,
+    error: initialError,
     // refetch,
   } = useGetOrderByIdQuery({ id, token });
 
-  // const { shippingAddress, isDelivered, deliveredAt } = order;
-  // const { shippingAddress } = order;
-  console.log("Is Loading", isLoading); // test
-  console.log("FROM ORDER SCREEN", order); // test
-  console.log("Is SUCCESS", isSuccess); // test
-  // console.error("ERROR", error); // test
+  const [updatePaidStatus] = useUpdatePaidStatusMutation();
+
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: order.grandTotal },
+          },
+        ],
+      })
+      .then((orderId) => {
+        return orderId;
+      });
+  };
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async function (orderDetails) {
+      try {
+        await updatePaidStatus({ id: order.id, token, orderDetails }).unwrap();
+        toast.success("Payment processed successfully!");
+      } catch (error) {
+        setErrorMessage(error);
+        setModalOpen(true);
+      }
+    });
+  };
+
+  const onError = (error) => {
+    setErrorMessage(
+      error?.data?.message
+        ? error.data.message
+        : "An error ocurred while processing your payment. Please try again later"
+    );
+    setModalOpen(true);
+  };
+
+  const handleErrorClear = () => {
+    setErrorMessage(null);
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -36,7 +77,7 @@ export default function Order() {
         <Spinner />
       ) : isError ? (
         <h2 className="alert-error">
-          {error?.data?.message ||
+          {initialError?.data?.message ||
             "Order cannot be displayed. Please try later"}
         </h2>
       ) : (
@@ -64,7 +105,9 @@ export default function Order() {
                 <h2 className="mb-2 text-lg font-semibold">Payment Method</h2>
                 <div>{order.paymentMethod}</div>
                 {order.isPaid ? (
-                  <div className="alert-success">Paid at {order.paidAt}</div>
+                  <div className="alert-success">
+                    Paid at {order.paidAt.toString()}
+                  </div>
                 ) : (
                   <div className="alert-error">Not paid</div>
                 )}
@@ -137,16 +180,33 @@ export default function Order() {
                       <div>${order.grandTotal.toFixed(2)}</div>
                     </div>
                   </li>
+                  {!order.isPaid && (
+                    <li>
+                      <div className="w-full">
+                        <PaypalButton
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        />
+                      </div>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
           </div>
         </>
       )}
+      <DialogModal
+        isOpen={modalOpen}
+        onClose={handleErrorClear}
+        title="Transaction Error"
+        description={
+          errorMessage ||
+          "An error ocurred while processing your payment. Please try again later"
+        }
+        className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
+      />
     </>
   );
 }
-/*
-{Date(order.deliveredAt).toLocaleString("en-US", timeZone: "CST" })}
-or order.deliveredAt.toLocaleString(). MDN has all the reference
-*/

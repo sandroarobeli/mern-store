@@ -26,6 +26,11 @@ async function placeOrder(req, res, next) {
         taxTotal: req.body.taxTotal,
         shippingTotal: req.body.shippingTotal,
         grandTotal: req.body.grandTotal,
+        paymentResult: {
+          paypalId: "",
+          status: "",
+          email_address: "",
+        },
         owner: {
           connect: {
             id: userId,
