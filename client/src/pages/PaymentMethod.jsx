@@ -54,7 +54,7 @@ export default function PaymentMethod() {
         onSubmit={handleSubmit(submitHandler)}
       >
         <h1 className="mb-4 text-xl">Payment Method</h1>
-        {["Card Payment", "PayPal", "Cash on delivery"].map((payment) => (
+        {["PayPal / Credit Card", "Cash on delivery"].map((payment) => (
           <div key={payment} className="mb-4">
             <label htmlFor={payment} className="p-2">
               {payment}

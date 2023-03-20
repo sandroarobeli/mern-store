@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useIdleTimer } from "react-idle-timer";
 import { ToastContainer } from "react-toastify";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import "react-toastify/dist/ReactToastify.css";
 import "@fontsource/orbitron/variable.css";
 import "@fontsource/inter/variable.css";
@@ -22,6 +23,7 @@ import PasswordResetEmail from "./pages/PasswordResetEmail";
 import PasswordResetForm from "./pages/PasswordResetForm";
 import ExpiredPasswordLink from "./pages/ExpiredPasswordLink";
 import Confirmation from "./pages/Confirmation";
+import { useGetPaypalClientIdQuery } from "./redux/apiSlice";
 import {
   selectToken,
   selectTokenExpiration,
@@ -34,6 +36,9 @@ function App() {
   const token = useSelector(selectToken);
   const tokenExpiration = useSelector(selectTokenExpiration);
   const navigate = useNavigate();
+
+  // Get Paypal clientId from server instead of storing it in the client
+  const { data: paypalClientId } = useGetPaypalClientIdQuery({ token });
 
   // function defining what to do due to inactivity
   const onIdle = () => {
@@ -68,55 +73,66 @@ function App() {
   }
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="" exact element={<HomePage />} />
-        <Route path="product/:slug" exact element={<Product />} />
-        <Route path="cart" exact element={<Cart />} />
-        <Route path="login" exact element={<Login />} />
-        <Route path="register" exact element={<Register />} />
-        {token && (
-          <Route path="shipping-address" exact element={<ShippingAddress />} />
-        )}
-        {token && (
-          <Route path="payment-method" exact element={<PaymentMethod />} />
-        )}
-        {token && <Route path="place-order" exact element={<PlaceOrder />} />}
-        {token && <Route path="order/:id" exact element={<Order />} />}
-        <Route path="inactivity" exact element={<Inactivity />} />
-        <Route
-          path="password-reset-email"
-          exact
-          element={<PasswordResetEmail />}
+    <PayPalScriptProvider
+      options={{
+        "client-id": paypalClientId, // process.env.REACT_APP_PAYPAL_CLIENT_ID,
+        currency: "USD",
+      }}
+    >
+      <Layout>
+        <Routes>
+          <Route path="" exact element={<HomePage />} />
+          <Route path="product/:slug" exact element={<Product />} />
+          <Route path="cart" exact element={<Cart />} />
+          <Route path="login" exact element={<Login />} />
+          <Route path="register" exact element={<Register />} />
+          {token && (
+            <Route
+              path="shipping-address"
+              exact
+              element={<ShippingAddress />}
+            />
+          )}
+          {token && (
+            <Route path="payment-method" exact element={<PaymentMethod />} />
+          )}
+          {token && <Route path="place-order" exact element={<PlaceOrder />} />}
+          {token && <Route path="order/:id" exact element={<Order />} />}
+          <Route path="inactivity" exact element={<Inactivity />} />
+          <Route
+            path="password-reset-email"
+            exact
+            element={<PasswordResetEmail />}
+          />
+          <Route path="confirmation" exact element={<Confirmation />} />
+          <Route
+            path="password-reset-form"
+            exact
+            element={<PasswordResetForm />}
+          />
+          <Route
+            path="expired-password-link"
+            exact
+            element={<ExpiredPasswordLink />}
+          />
+          <Route path="*" element={<NotFound />} />
+          {/*<Route path="*" element={<Navigate replace to="" />} /> This is Catch all*/}
+        </Routes>
+        <ToastContainer
+          className="toast-message"
+          position="bottom-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark" // "light"
         />
-        <Route path="confirmation" exact element={<Confirmation />} />
-        <Route
-          path="password-reset-form"
-          exact
-          element={<PasswordResetForm />}
-        />
-        <Route
-          path="expired-password-link"
-          exact
-          element={<ExpiredPasswordLink />}
-        />
-        <Route path="*" element={<NotFound />} />
-        {/*<Route path="*" element={<Navigate replace to="" />} /> This is Catch all*/}
-      </Routes>
-      <ToastContainer
-        className="toast-message"
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark" // "light"
-      />
-    </Layout>
+      </Layout>
+    </PayPalScriptProvider>
   );
 }
 

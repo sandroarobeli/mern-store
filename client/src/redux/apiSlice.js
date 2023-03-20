@@ -6,7 +6,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_SERVER_DOMAIN}/api`,
   }),
-  tagTypes: ["Product"],
+  tagTypes: ["Product", "Order"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: () => "/products",
@@ -68,6 +68,16 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    getPaypalClientId: builder.query({
+      query: ({ token }) => ({
+        url: "/users/paypal-client-id",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        mode: "cors",
+      }),
+    }),
     placeOrder: builder.mutation({
       query: (initialOrder) => ({
         url: "/orders/place-order",
@@ -79,8 +89,6 @@ export const apiSlice = createApi({
         mode: "cors",
         body: initialOrder,
       }),
-      // Disabling this, so it does not invalidate /product/:id rout
-      // invalidatesTags: ["Product"],
     }),
     getOrderById: builder.query({
       // REMEMBER: IF I NEED MORE THAN ONE ARGUMENT IN THE QUERY BELOW,
@@ -92,6 +100,20 @@ export const apiSlice = createApi({
           Authorization: "Bearer " + token,
         },
       }),
+      providesTags: ["Order"],
+    }),
+    updatePaidStatus: builder.mutation({
+      query: ({ id, token, orderDetails }) => ({
+        url: `/orders/${id}/pay`,
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: orderDetails,
+      }),
+      invalidatesTags: ["Order"],
     }),
   }),
 });
@@ -115,4 +137,6 @@ export const {
   useUpdatePasswordMutation,
   usePlaceOrderMutation,
   useGetOrderByIdQuery,
+  useUpdatePaidStatusMutation,
+  useGetPaypalClientIdQuery,
 } = apiSlice;
