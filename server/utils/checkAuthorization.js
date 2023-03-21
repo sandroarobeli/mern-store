@@ -11,7 +11,6 @@ function checkAuthorization(req, res, next) {
   }
   try {
     const token = req.headers.authorization.split(" ")[1]; // Format -> authorization: 'Bearer TOKEN'
-
     if (!token) {
       // redundancy measure. catch below does it too
       throw new Error("Authorization required. Please log in or sign up.");

@@ -15,10 +15,6 @@ async function getOrderById(req, res, next) {
       // },
     });
 
-    // console.log("retrieved order:", existingOrder); // test
-    // console.log("ownerId", existingOrder.ownerId); // test
-    // console.log("logged in userId", userId); // test
-
     if (!existingOrder) {
       return next(new Error("Order could not be found"));
     }

@@ -55,6 +55,7 @@ model Order {
   paymentResult PaymentResult
   owner User                      @relation(fields: [ownerId], references: [id])
   ownerId                         String  @db.ObjectId 
+  createdAt   DateTime @default(now())
 }
 
 // ADDRESS PAID AT AND DELIVERED AT IF AND AS SOON AS THE COURSE GETS THERE.

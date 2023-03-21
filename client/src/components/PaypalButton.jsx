@@ -1,6 +1,11 @@
 import { PayPalButtons } from "@paypal/react-paypal-js";
 
-export default function PaypalButton({ createOrder, onApprove, onError }) {
+export default function PaypalButton({
+  createOrder,
+  onApprove,
+  onError,
+  onCancel,
+}) {
   return (
     <PayPalButtons
       style={{
@@ -9,6 +14,7 @@ export default function PaypalButton({ createOrder, onApprove, onError }) {
       createOrder={createOrder}
       onApprove={onApprove}
       onError={onError}
+      onCancel={onCancel}
     />
   );
 }

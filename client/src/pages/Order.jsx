@@ -66,6 +66,10 @@ export default function Order() {
     setModalOpen(true);
   };
 
+  const onCancel = () => {
+    toast.success("Payment Cancelled");
+  };
+
   const handleErrorClear = () => {
     setErrorMessage(null);
     setModalOpen(false);
@@ -94,7 +98,7 @@ export default function Order() {
                 </div>
                 {order.isDelivered ? (
                   <div className="alert-success">
-                    Delivered at {order.deliveredAt}
+                    Delivered at {new Date(order.deliveredAt).toLocaleString()}
                   </div>
                 ) : (
                   <div className="alert-error">Not delivered</div>
@@ -106,7 +110,7 @@ export default function Order() {
                 <div>{order.paymentMethod}</div>
                 {order.isPaid ? (
                   <div className="alert-success">
-                    Paid at {order.paidAt.toString()}
+                    Paid at {new Date(order.paidAt).toLocaleString()}
                   </div>
                 ) : (
                   <div className="alert-error">Not paid</div>
@@ -180,17 +184,19 @@ export default function Order() {
                       <div>${order.grandTotal.toFixed(2)}</div>
                     </div>
                   </li>
-                  {!order.isPaid && (
-                    <li>
-                      <div className="w-full">
-                        <PaypalButton
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        />
-                      </div>
-                    </li>
-                  )}
+                  {!order.isPaid &&
+                    order.paymentMethod === "PayPal / Credit Card" && (
+                      <li>
+                        <div className="w-full">
+                          <PaypalButton
+                            createOrder={createOrder}
+                            onApprove={onApprove}
+                            onError={onError}
+                            onCancel={onCancel}
+                          />
+                        </div>
+                      </li>
+                    )}
                 </ul>
               </div>
             </div>

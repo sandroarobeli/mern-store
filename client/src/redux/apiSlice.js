@@ -102,6 +102,15 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Order"],
     }),
+    getOrderHistory: builder.query({
+      query: ({ token, userId }) => ({
+        url: `/orders/${userId}/history`,
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }),
+    }),
     updatePaidStatus: builder.mutation({
       query: ({ id, token, orderDetails }) => ({
         url: `/orders/${id}/pay`,
@@ -117,15 +126,6 @@ export const apiSlice = createApi({
     }),
   }),
 });
-// For user profile lookup and that user's orders list lookup ==> use this
-// const getUser = await prisma.user.findUnique({
-//   where: {
-//     id: userId,
-//   },
-//   include: {
-//     orders: true,
-//   },
-// });
 
 export const {
   useGetProductsQuery,
@@ -137,6 +137,7 @@ export const {
   useUpdatePasswordMutation,
   usePlaceOrderMutation,
   useGetOrderByIdQuery,
+  useGetOrderHistoryQuery,
   useUpdatePaidStatusMutation,
   useGetPaypalClientIdQuery,
 } = apiSlice;
