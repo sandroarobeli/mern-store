@@ -23,7 +23,6 @@ export default function UserProfile() {
   const email = useSelector(selectUserEmail);
   const token = useSelector(selectToken);
   const [modalOpen, setModalOpen] = useState(false);
-  const [errorTitle, setErrorTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -59,10 +58,8 @@ export default function UserProfile() {
       }).unwrap();
 
       toast.success("Profile updated successfully!");
-      navigate("/"); // test
+      navigate("/");
     } catch (error) {
-      console.log("error from update profile", error.data); // test
-      setErrorTitle("Update Error");
       setErrorMessage(error.data.message); // Local Error state get populated by Redux error
       setModalOpen(true);
     }
@@ -194,7 +191,7 @@ export default function UserProfile() {
       <DialogModal
         isOpen={modalOpen}
         onClose={handleErrorClear}
-        title={errorTitle}
+        title="Update Error"
         description={
           errorMessage ||
           "An error ocurred while submitting your request. Please try again later"

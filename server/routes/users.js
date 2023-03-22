@@ -10,6 +10,7 @@ const resetEmail = require("../controllers/users/resetEmail");
 const passwordResetLinkValidate = require("../controllers/users/passwordResetLinkValidate");
 const updatePassword = require("../controllers/users/updatePassword");
 const updateProfile = require("../controllers/users/updateProfile");
+const deleteAccount = require("../controllers/users/delete");
 
 // Initializing the router object
 const router = express.Router();
@@ -72,6 +73,14 @@ router.patch(
   ],
   checkAuthorization,
   updateProfile
+);
+
+// Delete User account
+router.delete(
+  "/:userId/delete",
+  [check("email").not().isEmpty().isEmail().trim().escape()],
+  checkAuthorization,
+  deleteAccount
 );
 
 module.exports = router;
