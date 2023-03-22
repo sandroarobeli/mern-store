@@ -68,7 +68,7 @@ textarea {
 }
 
 .error-button {
-  @apply rounded font-semibold bg-red-500 text-white  py-2 px-4 shadow outline-none hover:bg-red-600 active:bg-red-700;
+  @apply rounded font-semibold bg-red-500 text-white py-2 px-4 shadow outline-none hover:bg-red-600 active:bg-red-700;
 }
 
 .google-button {

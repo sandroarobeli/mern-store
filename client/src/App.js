@@ -24,7 +24,8 @@ import PasswordResetForm from "./pages/PasswordResetForm";
 import ExpiredPasswordLink from "./pages/ExpiredPasswordLink";
 import Confirmation from "./pages/Confirmation";
 import OrderHistory from "./pages/OrderHistory";
-import { useGetPaypalClientIdQuery } from "./redux/apiSlice";
+import UserProfile from "./pages/UserProfile";
+
 import {
   selectToken,
   selectTokenExpiration,
@@ -38,9 +39,6 @@ function App() {
   const tokenExpiration = useSelector(selectTokenExpiration);
   const navigate = useNavigate();
 
-  // Get Paypal clientId from server instead of storing it in the client
-  const { data: paypalClientId } = useGetPaypalClientIdQuery({ token });
-  console.log(paypalClientId); // temp
   // function defining what to do due to inactivity
   const onIdle = () => {
     if (token) {
@@ -76,7 +74,7 @@ function App() {
   return (
     <PayPalScriptProvider
       options={{
-        "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID, // paypalClientId, // process.env.REACT_APP_PAYPAL_CLIENT_ID,
+        "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
         currency: "USD",
       }}
     >
@@ -102,6 +100,7 @@ function App() {
           {token && (
             <Route path="order-history" exact element={<OrderHistory />} />
           )}
+          {token && <Route path="profile" exact element={<UserProfile />} />}
           <Route path="inactivity" exact element={<Inactivity />} />
           <Route
             path="password-reset-email"
