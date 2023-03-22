@@ -25,6 +25,7 @@ import ExpiredPasswordLink from "./pages/ExpiredPasswordLink";
 import Confirmation from "./pages/Confirmation";
 import OrderHistory from "./pages/OrderHistory";
 import UserProfile from "./pages/UserProfile";
+import DeleteAccount from "./pages/DeleteAccount";
 
 import {
   selectToken,
@@ -101,6 +102,9 @@ function App() {
             <Route path="order-history" exact element={<OrderHistory />} />
           )}
           {token && <Route path="profile" exact element={<UserProfile />} />}
+          {token && (
+            <Route path="delete-account" exact element={<DeleteAccount />} />
+          )}
           <Route path="inactivity" exact element={<Inactivity />} />
           <Route
             path="password-reset-email"

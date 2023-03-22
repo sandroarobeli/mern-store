@@ -84,6 +84,20 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    deleteAccount: builder.mutation({
+      query: ({ userId, email, token }) => ({
+        url: `/users/${userId}/delete`,
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token, // test wrong token!
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {
+          email: email,
+        },
+      }),
+    }),
     placeOrder: builder.mutation({
       query: (initialOrder) => ({
         url: "/orders/place-order",
@@ -142,6 +156,7 @@ export const {
   usePasswordResetEmailMutation,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
+  useDeleteAccountMutation,
   usePlaceOrderMutation,
   useGetOrderByIdQuery,
   useGetOrderHistoryQuery,
