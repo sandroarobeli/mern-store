@@ -14,6 +14,9 @@ export default function Home() {
     refetch,
   } = useGetProductsQuery();
 
+  if (isError) {
+    console.log("error from home", error); // test
+  }
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {isLoading && <Spinner />}
@@ -26,9 +29,11 @@ export default function Home() {
         onClose={refetch}
         title="An Error has ocurred"
         description={
-          error?.toString()
-            ? error.toString()
-            : "Unknown error has ocurred. Please try again later"
+          error?.error
+            ? error.error
+            : error?.data?.message
+            ? error.data.message
+            : "Unknown error has ocurred. Please try again later."
         }
         className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
       />

@@ -21,7 +21,7 @@ async function register(req, res, next) {
       where: { email: email },
     });
     if (existingUser) {
-      return next(new Error("The User already exists.")); // 422
+      return next(new Error("The User already exists."));
     }
 
     const newUser = await prisma.user.create({

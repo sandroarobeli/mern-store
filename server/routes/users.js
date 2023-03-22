@@ -9,7 +9,7 @@ const googleRegister = require("../controllers/users/googleRegister");
 const resetEmail = require("../controllers/users/resetEmail");
 const passwordResetLinkValidate = require("../controllers/users/passwordResetLinkValidate");
 const updatePassword = require("../controllers/users/updatePassword");
-const getPaypalClientId = require("../controllers/users/getPaypalClientId");
+const updateProfile = require("../controllers/users/updateProfile");
 
 // Initializing the router object
 const router = express.Router();
@@ -62,7 +62,16 @@ router.patch(
   updatePassword
 );
 
-// get Paypal client id. Privileged, requires authorization
-router.get("/paypal-client-id", checkAuthorization, getPaypalClientId);
+// Update User profile. Privileged, requires authorization
+router.patch(
+  "/update-profile",
+  [
+    check("name").not().isEmpty().trim().escape(),
+    check("email").not().isEmpty().isEmail().trim().escape(),
+    check("password").not().isEmpty().trim().escape(),
+  ],
+  checkAuthorization,
+  updateProfile
+);
 
 module.exports = router;

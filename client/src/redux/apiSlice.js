@@ -68,14 +68,20 @@ export const apiSlice = createApi({
         },
       }),
     }),
-    getPaypalClientId: builder.query({
-      query: ({ token }) => ({
-        url: "/users/paypal-client-id",
-        method: "GET",
+    updateProfile: builder.mutation({
+      query: ({ name, email, password, token }) => ({
+        url: "/users/update-profile",
+        method: "PATCH",
         headers: {
           Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
         },
         mode: "cors",
+        body: {
+          name: name,
+          email: email,
+          password: password,
+        },
       }),
     }),
     placeOrder: builder.mutation({
@@ -135,9 +141,9 @@ export const {
   useCredentialRegisterMutation,
   usePasswordResetEmailMutation,
   useUpdatePasswordMutation,
+  useUpdateProfileMutation,
   usePlaceOrderMutation,
   useGetOrderByIdQuery,
   useGetOrderHistoryQuery,
   useUpdatePaidStatusMutation,
-  useGetPaypalClientIdQuery,
 } = apiSlice;
