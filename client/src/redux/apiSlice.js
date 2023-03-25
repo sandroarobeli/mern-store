@@ -6,7 +6,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_SERVER_DOMAIN}/api`,
   }),
-  tagTypes: ["Product", "Order"],
+  tagTypes: ["Product", "Order", "Summary"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: () => "/products",
@@ -41,6 +41,7 @@ export const apiSlice = createApi({
           password: password,
         },
       }),
+      invalidatesTags: ["Summary"],
     }),
     googleRegister: builder.mutation({
       query: (initialGoogleCredential) => ({
@@ -48,6 +49,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: initialGoogleCredential,
       }),
+      invalidatesTags: ["Summary"],
     }),
     passwordResetEmail: builder.mutation({
       query: ({ email }) => ({
@@ -89,7 +91,7 @@ export const apiSlice = createApi({
         url: `/users/${userId}/delete`,
         method: "DELETE",
         headers: {
-          Authorization: "Bearer " + token, // test wrong token!
+          Authorization: "Bearer " + token,
           "Content-Type": "application/json",
         },
         mode: "cors",
@@ -97,6 +99,7 @@ export const apiSlice = createApi({
           email: email,
         },
       }),
+      invalidatesTags: ["Summary"],
     }),
     placeOrder: builder.mutation({
       query: (initialOrder) => ({
@@ -109,6 +112,7 @@ export const apiSlice = createApi({
         mode: "cors",
         body: initialOrder,
       }),
+      invalidatesTags: ["Summary"],
     }),
     getOrderById: builder.query({
       // REMEMBER: IF I NEED MORE THAN ONE ARGUMENT IN THE QUERY BELOW,
@@ -122,6 +126,7 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Order"],
     }),
+    // GET BACK TO THESE AND REMOVE UNNECESSARY USER IDS. PER ADMIN SUMMARY STYLE
     getOrderHistory: builder.query({
       query: ({ token, userId }) => ({
         url: `/orders/${userId}/history`,
@@ -144,6 +149,17 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Order"],
     }),
+    getAdminSummary: builder.query({
+      query: (token) => ({
+        url: "/admin/summary",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        mode: "cors",
+      }),
+      providesTags: ["Summary"],
+    }),
   }),
 });
 
@@ -161,4 +177,5 @@ export const {
   useGetOrderByIdQuery,
   useGetOrderHistoryQuery,
   useUpdatePaidStatusMutation,
+  useGetAdminSummaryQuery,
 } = apiSlice;

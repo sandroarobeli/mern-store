@@ -5,6 +5,7 @@ import { Menu } from "@headlessui/react";
 import {
   selectUserStatus,
   selectUserName,
+  selectUserAdmin,
   selectToken,
   logout,
 } from "../redux/userSlice";
@@ -14,6 +15,7 @@ export default function UserBadge() {
   const dispatch = useDispatch();
   const userStatus = useSelector(selectUserStatus);
   const userName = useSelector(selectUserName);
+  const isAdmin = useSelector(selectUserAdmin);
   const token = useSelector(selectToken);
   const navigate = useNavigate();
 
@@ -46,6 +48,13 @@ export default function UserBadge() {
                 Order History
               </Link>
             </Menu.Item>
+            {isAdmin && (
+              <Menu.Item>
+                <Link to="/admin/dashboard" className="dropdown-link">
+                  Admin Dashboard
+                </Link>
+              </Menu.Item>
+            )}
             <Menu.Item>
               <Link href="#" className="dropdown-link" onClick={logoutHandler}>
                 Logout
