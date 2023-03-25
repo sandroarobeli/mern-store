@@ -26,8 +26,9 @@ import Confirmation from "./pages/Confirmation";
 import OrderHistory from "./pages/OrderHistory";
 import UserProfile from "./pages/UserProfile";
 import DeleteAccount from "./pages/DeleteAccount";
-
+import AdminDashboard from "./pages/AdminDashboard";
 import {
+  selectUserAdmin,
   selectToken,
   selectTokenExpiration,
   logout,
@@ -37,6 +38,7 @@ import { cartReset } from "./redux/cartSlice";
 function App() {
   const dispatch = useDispatch();
   const token = useSelector(selectToken);
+  const isAdmin = useSelector(selectUserAdmin);
   const tokenExpiration = useSelector(selectTokenExpiration);
   const navigate = useNavigate();
 
@@ -104,6 +106,9 @@ function App() {
           {token && <Route path="profile" exact element={<UserProfile />} />}
           {token && (
             <Route path="delete-account" exact element={<DeleteAccount />} />
+          )}
+          {token && isAdmin && (
+            <Route path="admin/dashboard" exact element={<AdminDashboard />} />
           )}
           <Route path="inactivity" exact element={<Inactivity />} />
           <Route
