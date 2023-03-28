@@ -5,6 +5,7 @@ const placeOrder = require("../controllers/orders/placeOrder");
 const getOrderById = require("../controllers/orders/getOrderById");
 const getOrderHistory = require("../controllers/orders/getOrderHistory");
 const updatePaidStatus = require("../controllers/orders/updatePaidStatus");
+const updateDeliveredStatus = require("../controllers/orders/updateDeliveredStatus");
 
 // Initializing the router object
 const router = express.Router();
@@ -17,6 +18,9 @@ router.get("/:orderId", checkAuthorization, getOrderById);
 
 // Update order paid status. Privileged, requires authorization
 router.patch("/:orderId/pay", checkAuthorization, updatePaidStatus);
+
+// Update order paid status. Privileged, requires authorization as Admin
+router.patch("/:orderId/deliver", checkAuthorization, updateDeliveredStatus);
 
 // Retrieve order list belonging to a logged in user. Privileged, requires authorization
 router.get("/:userId/history", checkAuthorization, getOrderHistory);
