@@ -8,7 +8,7 @@ import Spinner from "../components/Spinner";
 
 export default function OrderHistory() {
   const token = useSelector(selectToken);
-  const userId = useSelector(selectUserId);
+  const userId = useSelector(selectUserId); // RESTORE
 
   const {
     data: orders,
@@ -52,19 +52,26 @@ export default function OrderHistory() {
                 <tr key={order.id} className="border-b">
                   <td className="p-5">{order.id.substring(20, 24)}</td>
                   <td className="p-5">
-                    {new Date(order.createdAt).toLocaleString().substring(0, 9)}
+                    {new Date(order.createdAt)
+                      .toLocaleString()
+                      .substring(0, 11)
+                      .replace(",", "")}
                   </td>
                   <td className="p-5">${order.grandTotal.toFixed(2)}</td>
                   <td className="p-5">
                     {order.isPaid
-                      ? new Date(order.paidAt).toLocaleString().substring(0, 9)
+                      ? new Date(order.paidAt)
+                          .toLocaleString()
+                          .substring(0, 11)
+                          .replace(",", "")
                       : "not paid"}
                   </td>
                   <td className="p-5">
                     {order.isDelivered
                       ? new Date(order.deliveredAt)
                           .toLocaleString()
-                          .substring(0, 9)
+                          .substring(0, 11)
+                          .replace(",", "")
                       : "not delivered"}
                   </td>
                   <td className="p-5">

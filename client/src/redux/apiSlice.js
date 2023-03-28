@@ -126,7 +126,6 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Order"],
     }),
-    // GET BACK TO THESE AND REMOVE UNNECESSARY USER IDS. PER ADMIN SUMMARY STYLE
     getOrderHistory: builder.query({
       query: ({ token, userId }) => ({
         url: `/orders/${userId}/history`,
@@ -160,6 +159,17 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Summary"],
     }),
+    getAdminOrders: builder.query({
+      query: (token) => ({
+        url: "/admin/orders",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        mode: "cors",
+      }),
+      providesTags: ["Order"],
+    }),
   }),
 });
 
@@ -178,4 +188,5 @@ export const {
   useGetOrderHistoryQuery,
   useUpdatePaidStatusMutation,
   useGetAdminSummaryQuery,
+  useGetAdminOrdersQuery,
 } = apiSlice;

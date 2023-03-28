@@ -27,6 +27,7 @@ import OrderHistory from "./pages/OrderHistory";
 import UserProfile from "./pages/UserProfile";
 import DeleteAccount from "./pages/DeleteAccount";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminOrders from "./pages/AdminOrders";
 import {
   selectUserAdmin,
   selectToken,
@@ -109,6 +110,9 @@ function App() {
           )}
           {token && isAdmin && (
             <Route path="admin/dashboard" exact element={<AdminDashboard />} />
+          )}
+          {token && isAdmin && (
+            <Route path="admin/orders" exact element={<AdminOrders />} />
           )}
           <Route path="inactivity" exact element={<Inactivity />} />
           <Route
