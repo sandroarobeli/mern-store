@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -33,13 +33,11 @@ export const options = {
 };
 
 export default function AdminDashboard() {
-  const location = useLocation();
   const token = useSelector(selectToken);
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [filteredData, setFilteredData] = useState([]);
 
-  console.log("test location", location); // test for now
-  console.log("filtered data", filteredData); // test
+  // console.log("filtered data", filteredData); // test
 
   const {
     data: summary,
@@ -52,11 +50,13 @@ export default function AdminDashboard() {
   } = useGetAdminSummaryQuery(token);
 
   // Filters summary.chartingData for the default (current) year on page load.
-  // And re filters on every year change
+  // And re filters on every year change. In addition data gets sorted
   useEffect(() => {
     const filterSalesByYear = (year) => {
       setFilteredData(
-        summary?.chartingData.filter((el) => el._id.substring(3) === year)
+        summary?.chartingData
+          .filter((el) => el._id.substring(3) === year)
+          .sort((a, b) => a._id.substring(0, 2) - b._id.substring(0, 2))
       );
     };
     filterSalesByYear(year);

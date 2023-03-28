@@ -11,6 +11,7 @@ function checkAuthorization(req, res, next) {
   }
   try {
     const token = req.headers.authorization.split(" ")[1]; // Format -> authorization: 'Bearer TOKEN'
+
     if (!token) {
       // redundancy measure. catch below does it too
       throw new Error("Authorization required. Please log in or sign up.");
@@ -20,9 +21,9 @@ function checkAuthorization(req, res, next) {
     const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN_KEY);
     // decodedToken has all the props we assigned, when created it. Namely: userId & password
     req.userData = { userId: decodedToken.userId }; // Adding new property on the fly
-    next(); // calling next() without an error allows request to continue it's journey!
+    // calling next() without an error allows request to continue it's journey!
+    next();
   } catch (error) {
-    // General catch
     return next(
       new Error(
         error?.message || "Authorization required. Please log in or sign up."

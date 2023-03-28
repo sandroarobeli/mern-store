@@ -20,5 +20,4 @@ router.patch("/:orderId/pay", checkAuthorization, updatePaidStatus);
 
 // Retrieve order list belonging to a logged in user. Privileged, requires authorization
 router.get("/:userId/history", checkAuthorization, getOrderHistory);
-
 module.exports = router;
