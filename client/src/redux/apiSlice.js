@@ -146,7 +146,7 @@ export const apiSlice = createApi({
         mode: "cors",
         body: orderDetails,
       }),
-      invalidatesTags: ["Order"],
+      invalidatesTags: ["Order", "Summary"],
     }),
     getAdminSummary: builder.query({
       query: (token) => ({
@@ -170,6 +170,19 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Order"],
     }),
+    updateDeliveredStatus: builder.mutation({
+      query: ({ id, token }) => ({
+        url: `/orders/${id}/deliver`,
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {},
+      }),
+      invalidatesTags: ["Order", "Summary"],
+    }),
   }),
 });
 
@@ -187,6 +200,7 @@ export const {
   useGetOrderByIdQuery,
   useGetOrderHistoryQuery,
   useUpdatePaidStatusMutation,
+  useUpdateDeliveredStatusMutation,
   useGetAdminSummaryQuery,
   useGetAdminOrdersQuery,
 } = apiSlice;

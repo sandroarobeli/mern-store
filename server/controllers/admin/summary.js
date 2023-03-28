@@ -4,11 +4,16 @@ async function summary(req, res, next) {
   const { userId } = req.userData;
 
   try {
-    const loggedInUser = await prisma.user.findUnique({
-      where: { id: userId },
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        isAdmin: true,
+      },
     });
 
-    if (!loggedInUser || loggedInUser.isAdmin === false) {
+    if (!currentUser || !currentUser.isAdmin) {
       return next(new Error("Access denied. Admin privileges required."));
     }
 

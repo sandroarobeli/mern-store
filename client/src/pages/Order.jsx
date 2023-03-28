@@ -3,10 +3,11 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import { selectToken } from "../redux/userSlice";
+import { selectToken, selectUserAdmin } from "../redux/userSlice";
 import {
   useGetOrderByIdQuery,
   useUpdatePaidStatusMutation,
+  useUpdateDeliveredStatusMutation,
 } from "../redux/apiSlice";
 
 import PaypalButton from "../components/PaypalButton";
@@ -15,6 +16,7 @@ import DialogModal from "../components/DialogModal";
 
 export default function Order() {
   const token = useSelector(selectToken);
+  const isAdmin = useSelector(selectUserAdmin);
   const { id } = useParams();
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -30,6 +32,14 @@ export default function Order() {
   } = useGetOrderByIdQuery({ id, token });
 
   const [updatePaidStatus] = useUpdatePaidStatusMutation();
+  const [
+    updateDeliveredStatus,
+    {
+      isLoading: isDeliveryLoading,
+      // isError: isDeliveryError,
+      // error: deliveryError
+    },
+  ] = useUpdateDeliveredStatusMutation();
 
   const createOrder = (data, actions) => {
     return actions.order
@@ -75,6 +85,20 @@ export default function Order() {
     setModalOpen(false);
   };
 
+  const deliverOrder = async () => {
+    try {
+      await updateDeliveredStatus({ id: order.id, token }).unwrap();
+      toast.success("Order delivery complete");
+    } catch (error) {
+      setErrorMessage(
+        error?.data?.message
+          ? error.data.message
+          : "Error updating delivery status"
+      );
+      setModalOpen(true);
+    }
+  };
+  // order.paymentMethod === "PayPal / Credit Card" &&
   return (
     <>
       {isLoading ? (
@@ -184,19 +208,30 @@ export default function Order() {
                       <div>${order.grandTotal.toFixed(2)}</div>
                     </div>
                   </li>
-                  {!order.isPaid &&
-                    order.paymentMethod === "PayPal / Credit Card" && (
-                      <li>
-                        <div className="w-full">
-                          <PaypalButton
-                            createOrder={createOrder}
-                            onApprove={onApprove}
-                            onError={onError}
-                            onCancel={onCancel}
-                          />
-                        </div>
-                      </li>
-                    )}
+                  {!order.isPaid && (
+                    <li>
+                      <div className="w-full">
+                        <PaypalButton
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                          onCancel={onCancel}
+                        />
+                      </div>
+                    </li>
+                  )}
+                  {isAdmin && order.isPaid && !order.isDelivered && (
+                    <li>
+                      <button
+                        className="primary-button w-full"
+                        onClick={deliverOrder}
+                      >
+                        {isDeliveryLoading
+                          ? "Updating status"
+                          : "Deliver Order"}
+                      </button>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
