@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -12,8 +12,9 @@ import {
   Legend,
 } from "chart.js";
 
-import { selectToken } from "../redux/userSlice";
-import { useGetAdminSummaryQuery } from "../redux/apiSlice";
+import { selectToken } from "../../redux/userSlice";
+import { useGetAdminSummaryQuery } from "../../redux/apiSlice";
+import AdminNav from "../../components/AdminNav";
 
 ChartJS.register(
   CategoryScale,
@@ -33,12 +34,14 @@ export const options = {
 };
 
 export default function AdminDashboard() {
+  const location = useLocation();
+  const { pathname } = location;
   const token = useSelector(selectToken);
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [filteredData, setFilteredData] = useState([]);
 
   // console.log("filtered data", filteredData); // test
-
+  console.log("current location", pathname); // test
   const {
     data: summary,
     isLoading,
@@ -64,24 +67,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
-      <div>
-        <ul>
-          <li>
-            <Link to="/admin/dashboard" className="font-bold">
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/orders">Orders</Link>
-          </li>
-          <li>
-            <Link to="/admin/products">Products</Link>
-          </li>
-          <li>
-            <Link to="/admin/users">Users</Link>
-          </li>
-        </ul>
-      </div>
+      <AdminNav pathname={pathname} />
       <div className="md:col-span-3">
         <h1 className="mb-4 text-xl">Admin Dashboard</h1>
         {isLoading ? (

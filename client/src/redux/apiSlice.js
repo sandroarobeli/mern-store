@@ -12,6 +12,39 @@ export const apiSlice = createApi({
       query: () => "/products",
       providesTags: ["Product"],
     }),
+    updateProduct: builder.mutation({
+      query: ({
+        id,
+        token,
+        name,
+        slug,
+        price,
+        image,
+        category,
+        brand,
+        inStock,
+        description,
+      }) => ({
+        url: `/admin/product/${id}`,
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {
+          name: name,
+          slug: slug,
+          price: price,
+          image: image,
+          category: category,
+          brand: brand,
+          inStock: inStock,
+          description: description,
+        },
+      }),
+      invalidatesTags: ["Product"],
+    }),
     credentialLogin: builder.mutation({
       query: ({ email, password }) => ({
         url: "/users/login",
@@ -172,7 +205,7 @@ export const apiSlice = createApi({
     }),
     updateDeliveredStatus: builder.mutation({
       query: ({ id, token }) => ({
-        url: `/orders/${id}/deliver`,
+        url: `/admin/order/${id}`,
         method: "PATCH",
         headers: {
           Authorization: "Bearer " + token,
@@ -188,6 +221,7 @@ export const apiSlice = createApi({
 
 export const {
   useGetProductsQuery,
+  useUpdateProductMutation,
   useGoogleLoginMutation,
   useCredentialLoginMutation,
   useGoogleRegisterMutation,

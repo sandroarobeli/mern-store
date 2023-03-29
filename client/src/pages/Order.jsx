@@ -122,7 +122,7 @@ export default function Order() {
                 </div>
                 {order.isDelivered ? (
                   <div className="alert-success">
-                    Delivered at {new Date(order.deliveredAt).toLocaleString()}
+                    Delivered: {new Date(order.deliveredAt).toLocaleString()}
                   </div>
                 ) : (
                   <div className="alert-error">Not delivered</div>
@@ -134,7 +134,7 @@ export default function Order() {
                 <div>{order.paymentMethod}</div>
                 {order.isPaid ? (
                   <div className="alert-success">
-                    Paid at {new Date(order.paidAt).toLocaleString()}
+                    Paid: {new Date(order.paidAt).toLocaleString()}
                   </div>
                 ) : (
                   <div className="alert-error">Not paid</div>
@@ -227,7 +227,7 @@ export default function Order() {
                         onClick={deliverOrder}
                       >
                         {isDeliveryLoading
-                          ? "Updating status"
+                          ? "Updating status.."
                           : "Deliver Order"}
                       </button>
                     </li>

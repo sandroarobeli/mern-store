@@ -26,7 +26,7 @@ export default function ProductItem({ product }) {
           <h2 className="text-lg">{product.name}</h2>
         </Link>
         <p className="mb-2">{product.brand}</p>
-        <p>${product.price}</p>
+        <p>${product.price.toFixed(2)}</p>
         <AddToCartButton product={product} />
       </div>
     </div>
