@@ -10,9 +10,22 @@ async function getOrderById(req, res, next) {
         id: orderId,
       },
       // include: {
-      //   // If needs to be included, make sure only name gets returned!!
+      //   // If needs to be included, make sure only isAdmin gets returned!!
       //   owner: true,
+      //   owner: {
+      //     select: {
+      //       isAdmin: true,
+      //     },
+      //   },
       // },
+    });
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        isAdmin: true,
+      },
     });
 
     if (!existingOrder) {
@@ -20,8 +33,8 @@ async function getOrderById(req, res, next) {
     }
     // If logged in user tries to look up someone else's order..
     // e.g. userId from userData from token does not match
-    // order owner's id
-    if (existingOrder.ownerId !== userId) {
+    // order creator's id. Unless that logged in user is Admin
+    if (existingOrder.ownerId !== userId && !currentUser.isAdmin) {
       return next(new Error("You are not authorized to view this page"));
     }
 

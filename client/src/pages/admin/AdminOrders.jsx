@@ -1,11 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { selectToken } from "../redux/userSlice";
-import { useGetAdminOrdersQuery } from "../redux/apiSlice";
+import { selectToken } from "../../redux/userSlice";
+import { useGetAdminOrdersQuery } from "../../redux/apiSlice";
+import AdminNav from "../../components/AdminNav";
 
 export default function AdminOrders() {
+  const location = useLocation();
+  const { pathname } = location;
   const token = useSelector(selectToken);
 
   const {
@@ -18,29 +21,23 @@ export default function AdminOrders() {
     // refetch,
   } = useGetAdminOrdersQuery(token);
 
-  console.log(orders); // test
-  console.log(error); // test
+  // Sorts orders by date of creation from newest to oldest
+  const sortedOrders = useMemo(
+    () =>
+      orders
+        ?.map((order) => {
+          return {
+            ...order,
+            createdAt: Date.parse(order.createdAt),
+          };
+        })
+        .sort((a, b) => b.createdAt - a.createdAt),
+    [orders]
+  );
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
-      <div>
-        <ul>
-          <li>
-            <Link to="/admin/dashboard">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/admin/orders" className="font-bold">
-              Orders
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/products">Products</Link>
-          </li>
-          <li>
-            <Link to="/admin/users">Users</Link>
-          </li>
-        </ul>
-      </div>
-
+      <AdminNav pathname={pathname} />
       <div className="overflow-x-auto md:col-span-3">
         <h1 className="mb-4 text-xl">Admin Orders</h1>
         {isLoading ? (
@@ -67,9 +64,9 @@ export default function AdminOrders() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
+                {sortedOrders.map((order) => (
                   <tr key={order.id} className="border-b">
-                    <td classNam="p-5">{order.id.substring(20, 24)}</td>
+                    <td className="p-5">{order.id.substring(20, 24)}</td>
                     <td className="p-5">
                       {order.owner ? order.owner.name : "DELETED USER"}
                     </td>

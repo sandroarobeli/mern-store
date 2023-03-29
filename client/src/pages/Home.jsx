@@ -14,9 +14,6 @@ export default function Home() {
     // refetch,
   } = useGetProductsQuery();
 
-  if (isError) {
-    console.log("error from home", error); // test
-  }
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
       {isLoading && <Spinner />}

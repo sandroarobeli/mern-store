@@ -26,8 +26,10 @@ import Confirmation from "./pages/Confirmation";
 import OrderHistory from "./pages/OrderHistory";
 import UserProfile from "./pages/UserProfile";
 import DeleteAccount from "./pages/DeleteAccount";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminOrders from "./pages/AdminOrders";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminProductEdit from "./pages/admin/AdminProductEdit";
 import {
   selectUserAdmin,
   selectToken,
@@ -113,6 +115,16 @@ function App() {
           )}
           {token && isAdmin && (
             <Route path="admin/orders" exact element={<AdminOrders />} />
+          )}
+          {token && isAdmin && (
+            <Route path="admin/products" exact element={<AdminProducts />} />
+          )}
+          {token && isAdmin && (
+            <Route
+              path="admin/product/:id"
+              exact
+              element={<AdminProductEdit />}
+            />
           )}
           <Route path="inactivity" exact element={<Inactivity />} />
           <Route

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -20,8 +21,22 @@ export default function OrderHistory() {
     // refetch,
   } = useGetOrderHistoryQuery({ token, userId });
 
-  console.log("From History errors:", error); // test
-  console.log("Order History:", orders); // test
+  // Sorts orders by date of creation from newest to oldest
+  const sortedOrders = useMemo(
+    () =>
+      orders
+        ?.map((order) => {
+          return {
+            ...order,
+            createdAt: Date.parse(order.createdAt),
+          };
+        })
+        .sort((a, b) => b.createdAt - a.createdAt),
+    [orders]
+  );
+
+  // console.log("From History errors:", error); // test
+  // console.log("Order History:", orders); // test
   return (
     <div>
       <h1 className="mb-4 text-xl">Order History</h1>
@@ -48,7 +63,7 @@ export default function OrderHistory() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {sortedOrders.map((order) => (
                 <tr key={order.id} className="border-b">
                   <td className="p-5">{order.id.substring(20, 24)}</td>
                   <td className="p-5">
