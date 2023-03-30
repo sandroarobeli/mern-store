@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useUpdatePasswordMutation } from "../redux/apiSlice";
 import { clearError } from "../redux/userSlice";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function PasswordResetForm() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ export default function PasswordResetForm() {
 
   return (
     <>
+      <DynamicTitle title="Password reset form" />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(updatePasswordHandler)}

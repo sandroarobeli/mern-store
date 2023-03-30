@@ -14,6 +14,7 @@ import {
   useCredentialLoginMutation,
 } from "../redux/apiSlice";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -116,6 +117,7 @@ export default function Login() {
 
   return (
     <>
+      <DynamicTitle title="Login" />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitWithCredentialsHandler)}

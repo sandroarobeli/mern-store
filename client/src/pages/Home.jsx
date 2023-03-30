@@ -1,7 +1,7 @@
 import ProductItem from "../components/ProductItem";
-// import DialogModal from "../components/DialogModal";
 import Spinner from "../components/Spinner";
 import { useGetProductsQuery } from "../redux/apiSlice";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function Home() {
   const {
@@ -16,6 +16,7 @@ export default function Home() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <DynamicTitle title="Home" />
       {isLoading && <Spinner />}
       {isError && (
         <div className="alert-error">
@@ -30,19 +31,3 @@ export default function Home() {
     </div>
   );
 }
-
-/**
- <DialogModal
-        isOpen={isError} // set true for testing
-        onClose={refetch}
-        title="An Error has ocurred"
-        description={
-          error?.error
-            ? error.error
-            : error?.data?.message
-            ? error.data.message
-            : "Unknown error has ocurred. Please try again later."
-        }
-        className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
-      />
- */

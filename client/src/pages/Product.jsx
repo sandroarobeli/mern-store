@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 
 import { useGetProductsQuery } from "../redux/apiSlice";
 import AddToCartButton from "../components/AddToCartButton";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function Product() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Product() {
 
   return (
     <>
+      <DynamicTitle title={product.name} />
       <div>
         <div className="py-2">
           <Link to="/" className="font-semibold">

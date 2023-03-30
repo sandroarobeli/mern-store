@@ -11,6 +11,7 @@ import {
 } from "../redux/cartSlice";
 import { useGetProductsQuery } from "../redux/apiSlice";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ export default function Cart() {
 
   return (
     <div>
+      <DynamicTitle title="Cart" />
       <h1 className="mb-4 text-xl">Shopping Cart</h1>
       {allItems.length === 0 ? (
         <h4>

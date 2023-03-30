@@ -10,6 +10,7 @@ import {
 } from "../redux/cartSlice";
 import CheckoutWizard from "../components/CheckoutWizard";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function PaymentMethod() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ export default function PaymentMethod() {
   // We must have: firstName: 'James', lastName: 'James'). IN THIS CASE: localPaymentMethod
   return (
     <CheckoutWizard activeStep={2}>
+      <DynamicTitle title="Payment method" />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}

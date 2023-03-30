@@ -15,6 +15,7 @@ import {
   useCredentialLoginMutation,
 } from "../redux/apiSlice";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ export default function UserProfile() {
 
   return (
     <>
+      <DynamicTitle title={`Profile - ${name}`} />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}

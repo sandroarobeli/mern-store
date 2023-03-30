@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { clearError } from "../redux/userSlice";
 import { usePasswordResetEmailMutation } from "../redux/apiSlice";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function PasswordResetEmail() {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ export default function PasswordResetEmail() {
 
   return (
     <>
+      <DynamicTitle title="Password reset email" />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitEmailHandler)}

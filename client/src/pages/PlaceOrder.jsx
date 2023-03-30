@@ -13,6 +13,7 @@ import {
 } from "../redux/cartSlice";
 import { selectToken } from "../redux/userSlice";
 import { usePlaceOrderMutation } from "../redux/apiSlice";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function PlaceOrder() {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ export default function PlaceOrder() {
 
   return (
     <CheckoutWizard activeStep={3}>
+      <DynamicTitle title="Place order" />
       <h1 className="mb-4 text-xl">Place Order</h1>
       {allItems.length === 0 ? (
         <h4>

@@ -1,6 +1,9 @@
+import DynamicTitle from "../components/DynamicTitle";
+
 export default function Confirmation() {
   return (
     <div className="mx-auto">
+      <DynamicTitle title="Confirmation" />
       <h3 className="text-blue-600 text-xl md:text-2xl">Check your inbox</h3>
       <p className="mb-4 text-gray-900">
         We've sent an email with a link to reset your password. If you don't
