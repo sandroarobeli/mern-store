@@ -7,6 +7,7 @@ import { selectShippingAddress, saveShippingAddress } from "../redux/cartSlice";
 import { states } from "../utils/states";
 import { phoneFormatter } from "../utils/phoneFormatter";
 import CheckoutWizard from "../components/CheckoutWizard";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function ShippingAddress() {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ export default function ShippingAddress() {
 
   return (
     <CheckoutWizard activeStep={1}>
+      <DynamicTitle title="Shipping address" />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}

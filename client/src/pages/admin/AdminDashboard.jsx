@@ -15,6 +15,7 @@ import {
 import { selectToken } from "../../redux/userSlice";
 import { useGetAdminSummaryQuery } from "../../redux/apiSlice";
 import AdminNav from "../../components/AdminNav";
+import DynamicTitle from "../../components/DynamicTitle";
 
 ChartJS.register(
   CategoryScale,
@@ -67,6 +68,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
+      <DynamicTitle title="Admin dashboard" />
       <AdminNav pathname={pathname} />
       <div className="md:col-span-3">
         <h1 className="mb-4 text-xl">Admin Dashboard</h1>

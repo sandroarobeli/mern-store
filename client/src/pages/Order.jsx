@@ -13,6 +13,7 @@ import {
 import PaypalButton from "../components/PaypalButton";
 import Spinner from "../components/Spinner";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function Order() {
   const token = useSelector(selectToken);
@@ -101,6 +102,7 @@ export default function Order() {
   // order.paymentMethod === "PayPal / Credit Card" &&
   return (
     <>
+      <DynamicTitle title="Order review & payment" />
       {isLoading ? (
         <Spinner />
       ) : isError ? (

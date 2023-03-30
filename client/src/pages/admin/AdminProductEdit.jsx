@@ -11,6 +11,7 @@ import {
 import { selectToken } from "../../redux/userSlice";
 import AdminNav from "../../components/AdminNav";
 import DialogModal from "../../components/DialogModal";
+import DynamicTitle from "../../components/DynamicTitle";
 
 export default function AdminProductEdit() {
   const navigate = useNavigate();
@@ -104,6 +105,7 @@ export default function AdminProductEdit() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
+      <DynamicTitle title={`Profile - ${product.name}`} />
       <AdminNav pathname="/admin/products" />
       <div className="md:col-span-3">
         {isLoading ? (

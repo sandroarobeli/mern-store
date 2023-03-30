@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import { useGetProductsQuery } from "../../redux/apiSlice";
 import AdminNav from "../../components/AdminNav";
+import DynamicTitle from "../../components/DynamicTitle";
 
 export default function AdminProducts() {
   const location = useLocation();
@@ -19,6 +20,7 @@ export default function AdminProducts() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
+      <DynamicTitle title="Admin products" />
       <AdminNav pathname={pathname} />
       <div className="overflow-x-auto md:col-span-3">
         <h1 className="mb-4 text-xl">Products</h1>

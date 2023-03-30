@@ -12,6 +12,7 @@ import {
 } from "../redux/userSlice";
 import { useDeleteAccountMutation } from "../redux/apiSlice";
 import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function DeleteAccount() {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ export default function DeleteAccount() {
 
   return (
     <>
+      <DynamicTitle title="Delete account" />
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}

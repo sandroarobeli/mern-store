@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useGetOrderHistoryQuery } from "../redux/apiSlice";
 import { selectToken, selectUserId } from "../redux/userSlice";
 import Spinner from "../components/Spinner";
-// import DialogModal from "../components/DialogModal";
+import DynamicTitle from "../components/DynamicTitle";
 
 export default function OrderHistory() {
   const token = useSelector(selectToken);
@@ -39,6 +39,7 @@ export default function OrderHistory() {
   // console.log("Order History:", orders); // test
   return (
     <div>
+      <DynamicTitle title="Order history" />
       <h1 className="mb-4 text-xl">Order History</h1>
       {isLoading ? (
         <Spinner />
