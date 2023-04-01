@@ -38,7 +38,7 @@ async function updateProduct(req, res, next) {
       },
       data: {
         name: name,
-        slug: slug,
+        slug: slug + "-" + Math.random(), // Ensures slug remains unique
         price: price,
         image: image,
         category: category,

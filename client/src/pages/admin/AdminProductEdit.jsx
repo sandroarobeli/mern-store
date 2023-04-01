@@ -316,7 +316,9 @@ export default function AdminProductEdit() {
             </div>
             <div className="mb-4">
               <button
-                className="primary-button w-[250px]"
+                className={`primary-button w-[250px] ${
+                  updateLoading && "animate-pulse"
+                }`}
                 disabled={updateLoading}
               >
                 {updateLoading ? "Please wait.." : "Update Product"}

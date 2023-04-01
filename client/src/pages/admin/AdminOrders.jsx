@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -25,18 +25,20 @@ export default function AdminOrders() {
   } = useGetAdminOrdersQuery(token);
 
   // Sorts orders by date of creation from newest to oldest
-  const sortedOrders = useMemo(
-    () =>
-      orders
-        ?.map((order) => {
-          return {
-            ...order,
-            createdAt: Date.parse(order.createdAt),
-          };
-        })
-        .sort((a, b) => b.createdAt - a.createdAt),
-    [orders]
-  );
+  // const sortedOrders = useMemo(
+  //   () =>
+  //     orders
+  //       ?.map((order) => {
+  //         return {
+  //           ...order,
+  //           createdAt: Date.parse(order.createdAt),
+  //         };
+  //       })
+  //       .sort((a, b) => b.createdAt - a.createdAt),
+  //   [orders]
+  // );
+
+  // console.log(sortedOrders); // test
 
   // Sets value for filtering through existing orders
   const handleSearchValueChange = (event) => {
@@ -79,7 +81,7 @@ export default function AdminOrders() {
                 </tr>
               </thead>
               <tbody>
-                {sortedOrders.map(
+                {orders.map(
                   (order) =>
                     order.owner.name.toLowerCase().includes(searchValue) && (
                       <tr key={order.id} className="border-b">

@@ -225,7 +225,9 @@ export default function Order() {
                   {isAdmin && order.isPaid && !order.isDelivered && (
                     <li>
                       <button
-                        className="primary-button w-full"
+                        className={`primary-button w-full ${
+                          isDeliveryLoading && "animate-pulse"
+                        }`}
                         onClick={deliverOrder}
                       >
                         {isDeliveryLoading

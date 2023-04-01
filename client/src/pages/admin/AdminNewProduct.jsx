@@ -120,7 +120,6 @@ export default function AdminNewProduct() {
     setErrorMessage("");
   };
 
-  // THEN DELETE PRODUCT LIST ONE BY ONE, THEN ADD UPDATEDaT TO MODEL, THEN RE CREATE THE LIST
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
       <DynamicTitle title="Admin new product" />
@@ -274,7 +273,9 @@ export default function AdminNewProduct() {
           </div>
           <div className="mb-4">
             <button
-              className="primary-button w-[250px]"
+              className={`primary-button w-[250px] ${
+                createLoading && "animate-pulse"
+              }`}
               disabled={createLoading}
             >
               {createLoading ? "Please wait.." : "Create Product"}

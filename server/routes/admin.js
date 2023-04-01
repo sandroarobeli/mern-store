@@ -6,6 +6,7 @@ const summary = require("../controllers/admin/summary");
 const getOrdersList = require("../controllers/admin/ordersList");
 const updateProduct = require("../controllers/admin/updateProduct");
 const createProduct = require("../controllers/admin/createProduct");
+const deleteProduct = require("../controllers/admin/deleteProduct");
 const updateDeliveredStatus = require("../controllers/admin/updateDeliveredStatus");
 const signature = require("../controllers/admin/cloudinarySign");
 
@@ -51,6 +52,9 @@ router.post(
   checkAuthorization,
   createProduct
 );
+
+// Delete product. Privileged, requires authorization as Admin
+router.delete("/product/:productId", checkAuthorization, deleteProduct);
 
 // Update order delivery status. Privileged, requires authorization as Admin
 router.patch("/order/:orderId", checkAuthorization, updateDeliveredStatus);

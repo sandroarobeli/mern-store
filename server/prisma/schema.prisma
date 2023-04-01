@@ -36,7 +36,7 @@ model Product {
   inStock     Int @default(0)
   description String
   createdAt   DateTime @default(now())
-  // updatedAt   DateTime @updatedAt  // RESTORE AFTER REPLACING ENTIRE STOCK!!! 
+  updatedAt   DateTime @updatedAt   
 }
 
 model Order {

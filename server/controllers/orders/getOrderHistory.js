@@ -14,7 +14,7 @@ async function getOrderHistory(req, res, next) {
         ownerId: userId,
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
     });
     res.status(200).json(orders);

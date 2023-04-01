@@ -180,7 +180,9 @@ export default function PlaceOrder() {
                 </li>
                 <li>
                   <button
-                    className="primary-button w-full"
+                    className={`primary-button w-full ${
+                      isLoading && "animate-pulse"
+                    }`}
                     onClick={placeOrderHandler}
                     disabled={isLoading}
                   >

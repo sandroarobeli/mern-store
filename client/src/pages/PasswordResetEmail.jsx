@@ -73,7 +73,12 @@ export default function PasswordResetEmail() {
           )}
         </div>
         <div className="mb-4">
-          <button className="primary-button w-[250px]" disabled={isLoading}>
+          <button
+            className={`primary-button w-[250px] ${
+              isLoading && "animate-pulse"
+            }`}
+            disabled={isLoading}
+          >
             {isLoading ? "Submitting.." : "Submit"}
           </button>
         </div>
