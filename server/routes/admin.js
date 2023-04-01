@@ -5,7 +5,9 @@ const checkAuthorization = require("../utils/checkAuthorization");
 const summary = require("../controllers/admin/summary");
 const getOrdersList = require("../controllers/admin/ordersList");
 const updateProduct = require("../controllers/admin/updateProduct");
+const createProduct = require("../controllers/admin/createProduct");
 const updateDeliveredStatus = require("../controllers/admin/updateDeliveredStatus");
+const signature = require("../controllers/admin/cloudinarySign");
 
 // Initializing the router object
 const router = express.Router();
@@ -33,7 +35,27 @@ router.patch(
   updateProduct
 );
 
+// Create product. Privileged, requires authorization as Admin
+router.post(
+  "/product",
+  [
+    check("name").not().isEmpty().trim().escape(),
+    check("slug").not().isEmpty().trim().escape(),
+    check("price").isFloat(),
+    check("image").not().isEmpty(), //   .trim().escape(), // escape Destroys the path!
+    check("category").not().isEmpty().trim().escape(),
+    check("brand").not().isEmpty().trim().escape(),
+    check("inStock").isInt(),
+    check("description").not().isEmpty().trim().escape(),
+  ],
+  checkAuthorization,
+  createProduct
+);
+
 // Update order delivery status. Privileged, requires authorization as Admin
 router.patch("/order/:orderId", checkAuthorization, updateDeliveredStatus);
+
+// Gain authorization from Cloudinary by receiving signature and timestamp credentials
+router.get("/cloudinary-sign", checkAuthorization, signature);
 
 module.exports = router;

@@ -30,6 +30,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminProductEdit from "./pages/admin/AdminProductEdit";
+import AdminNewProduct from "./pages/admin/AdminNewProduct";
 import {
   selectUserAdmin,
   selectToken,
@@ -118,6 +119,13 @@ function App() {
           )}
           {token && isAdmin && (
             <Route path="admin/products" exact element={<AdminProducts />} />
+          )}
+          {token && isAdmin && (
+            <Route
+              path="admin/new-product"
+              exact
+              element={<AdminNewProduct />}
+            />
           )}
           {token && isAdmin && (
             <Route

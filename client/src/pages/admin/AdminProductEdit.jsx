@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import {
   useGetProductsQuery,
   useUpdateProductMutation,
+  useGetSignatureQuery,
+  useUploadImageMutation,
 } from "../../redux/apiSlice";
 import { selectToken } from "../../redux/userSlice";
 import AdminNav from "../../components/AdminNav";
@@ -44,15 +46,25 @@ export default function AdminProductEdit() {
     }
   );
 
+  const {
+    data: credentials, // { signature, timestamp },
+    isError: isSignatureError,
+    error: signatureError,
+  } = useGetSignatureQuery(token);
+
+  const [
+    uploadImage,
+    {
+      // data: imageOnCloud,
+      isLoading: isUploading,
+      // isSuccess: uploadSuccess,
+      isError: isUploadError,
+      // error: uploadError,
+    },
+  ] = useUploadImageMutation();
+
   const [updateProduct, { isLoading: updateLoading }] =
     useUpdateProductMutation();
-
-  useEffect(() => {
-    if (!product) {
-      toast.error("Product no found!");
-      return navigate("/admin/products");
-    }
-  }, [navigate, product]);
 
   useEffect(() => {
     // Pre populate the fields with product's existing data for convenience
@@ -66,6 +78,40 @@ export default function AdminProductEdit() {
     setValue("inStock", product.inStock);
     setValue("description", product.description);
   }, [product, setValue]);
+
+  const imageUploadHandler = async (event, imageField = "image") => {
+    try {
+      // api call to to receive signature & timestamp credentials
+      if (isSignatureError) {
+        setErrorMessage(signatureError.data.message);
+        setModalOpen(true);
+      }
+      // Capture the file from PC and prep formData object
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("signature", credentials.signature);
+      formData.append("timestamp", credentials.timestamp);
+      formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
+      // api call to upload the image  to Cloudinary and receive new image
+      const imageOnCloud = await uploadImage(formData).unwrap();
+      if (isUploadError) {
+        setErrorMessage(
+          "Error ocurred while uploading the image. Please try again later."
+        );
+        setModalOpen(true);
+      }
+      // Change url in image field from old to new url from cloudinary
+      if (imageOnCloud) {
+        setValue(imageField, imageOnCloud.secure_url);
+        toast.success("Image upload successful");
+      }
+    } catch (error) {
+      console.log("error from catch", error);
+      setErrorMessage(error.data.message);
+      setModalOpen(true);
+    }
+  };
 
   const productUpdateHandler = async ({
     name,
@@ -105,7 +151,7 @@ export default function AdminProductEdit() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
-      <DynamicTitle title={`Profile - ${product.name}`} />
+      <DynamicTitle title={`Profile - ${product?.name}`} />
       <AdminNav pathname="/admin/products" />
       <div className="md:col-span-3">
         {isLoading ? (
@@ -122,7 +168,7 @@ export default function AdminProductEdit() {
             className="mx-auto max-w-screen-md"
             onSubmit={handleSubmit(productUpdateHandler)}
           >
-            <h1 className="mb-4 text-xl">{`Edit Product ${product.id}`}</h1>
+            <h1 className="mb-4 text-xl">{`Edit Product ${product?.id}`}</h1>
             <div className="mb-4">
               <label htmlFor="name">Name</label>
               <input
@@ -173,6 +219,7 @@ export default function AdminProductEdit() {
                 <div className="text-red-500">{errors.price.message}</div>
               )}
             </div>
+
             <div className="mb-4">
               <label htmlFor="image">Image</label>
               <input
@@ -189,6 +236,20 @@ export default function AdminProductEdit() {
                 <div className="text-red-500">{errors.image.message}</div>
               )}
             </div>
+
+            <div className="mb-4">
+              <label htmlFor="imageFile">Upload image</label>
+              <input
+                type="file"
+                className="w-full"
+                id="imageFile"
+                onChange={imageUploadHandler}
+              />
+              {isUploading && (
+                <div className="animate-pulse text-blue-800">Uploading..</div>
+              )}
+            </div>
+
             <div className="mb-4">
               <label htmlFor="category">Category</label>
               <input
