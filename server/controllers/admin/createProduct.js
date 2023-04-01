@@ -34,7 +34,7 @@ async function createProduct(req, res, next) {
     await prisma.product.create({
       data: {
         name,
-        slug,
+        slug: slug + "-" + Math.random(), // Ensures slug remains unique
         category,
         image,
         price,

@@ -24,7 +24,7 @@ async function getOrdersList(req, res, next) {
         },
       },
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
     });
     res.status(200).json(orders);

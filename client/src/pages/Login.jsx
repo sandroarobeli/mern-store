@@ -181,7 +181,12 @@ export default function Login() {
           </Link>
         </div>
         <div className="mb-4">
-          <button className="primary-button w-[250px]" disabled={isLoading}>
+          <button
+            className={`primary-button w-[250px] ${
+              isLoading && "animate-pulse"
+            }`}
+            disabled={isLoading}
+          >
             {isLoading ? "Please wait.." : "Login"}
           </button>
         </div>

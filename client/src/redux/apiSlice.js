@@ -45,6 +45,19 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    deleteProduct: builder.mutation({
+      query: ({ id, token }) => ({
+        url: `/admin/product/${id}`,
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {},
+      }),
+      invalidatesTags: ["Product"],
+    }),
     credentialLogin: builder.mutation({
       query: ({ email, password }) => ({
         url: "/users/login",
@@ -290,4 +303,5 @@ export const {
   useGetSignatureQuery,
   useUploadImageMutation,
   useCreateProductMutation,
+  useDeleteProductMutation,
 } = apiSlice;

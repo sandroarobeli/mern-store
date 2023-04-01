@@ -85,7 +85,12 @@ export default function DeleteAccount() {
           )}
         </div>
         <div className="mb-4">
-          <button className="primary-button w-[250px]" disabled={isLoading}>
+          <button
+            className={`primary-button w-[250px] ${
+              isLoading && "animate-pulse"
+            }`}
+            disabled={isLoading}
+          >
             {isLoading ? "Please wait.." : "Delete Account"}
           </button>
         </div>
