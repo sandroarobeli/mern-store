@@ -13,7 +13,7 @@ export default function ProductItem({ product }) {
         <img
           src={product.image}
           alt={product.name}
-          className="rounded-t shadow"
+          className="rounded-t shadow h-[330px] w-full object-cover"
         />
         {product.inStock === 0 ? (
           <h3 className="text-5xl text-amber-500 font-extrabold absolute left-0 right-0 top-1/3 text-center z-50">

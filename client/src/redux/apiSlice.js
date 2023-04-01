@@ -216,6 +216,56 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Order", "Summary"],
     }),
+    getSignature: builder.query({
+      query: (token) => ({
+        url: "/admin/cloudinary-sign",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        mode: "cors",
+      }),
+    }),
+    uploadImage: builder.mutation({
+      query: (formData) => ({
+        url: `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/auto/upload`,
+        method: "POST",
+        mode: "cors",
+        body: formData,
+      }),
+    }),
+    createProduct: builder.mutation({
+      query: ({
+        token,
+        name,
+        slug,
+        category,
+        image,
+        price,
+        brand,
+        inStock,
+        description,
+      }) => ({
+        url: "/admin/product",
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {
+          name: name,
+          slug: slug,
+          category: category,
+          image: image,
+          price: price,
+          brand: brand,
+          inStock: inStock,
+          description: description,
+        },
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -237,4 +287,7 @@ export const {
   useUpdateDeliveredStatusMutation,
   useGetAdminSummaryQuery,
   useGetAdminOrdersQuery,
+  useGetSignatureQuery,
+  useUploadImageMutation,
+  useCreateProductMutation,
 } = apiSlice;

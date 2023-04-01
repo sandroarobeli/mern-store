@@ -30,6 +30,14 @@ export default function AdminNav({ pathname }) {
         </li>
         <li>
           <Link
+            to="/admin/new-product"
+            className={pathname === "/admin/new-product" ? "font-bold" : ""}
+          >
+            New product
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/admin/users"
             className={pathname === "/admin/users" ? "font-bold" : ""}
           >
