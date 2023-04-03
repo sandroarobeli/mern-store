@@ -6,7 +6,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_SERVER_DOMAIN}/api`,
   }),
-  tagTypes: ["Product", "Order", "Summary"],
+  tagTypes: ["Product", "Order", "Summary", "User"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: () => "/products",
@@ -58,6 +58,19 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    deleteUser: builder.mutation({
+      query: ({ id, token }) => ({
+        url: `/admin/user/${id}`,
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {},
+      }),
+      invalidatesTags: ["User"],
+    }),
     credentialLogin: builder.mutation({
       query: ({ email, password }) => ({
         url: "/users/login",
@@ -87,7 +100,7 @@ export const apiSlice = createApi({
           password: password,
         },
       }),
-      invalidatesTags: ["Summary"],
+      invalidatesTags: ["Summary", "User"],
     }),
     googleRegister: builder.mutation({
       query: (initialGoogleCredential) => ({
@@ -95,7 +108,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: initialGoogleCredential,
       }),
-      invalidatesTags: ["Summary"],
+      invalidatesTags: ["Summary", "User"],
     }),
     passwordResetEmail: builder.mutation({
       query: ({ email }) => ({
@@ -115,6 +128,32 @@ export const apiSlice = createApi({
           password: password,
         },
       }),
+    }),
+    getUsers: builder.query({
+      query: (token) => ({
+        url: "/admin/users",
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        mode: "cors",
+      }),
+      providesTags: ["User"],
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, token, isAdmin }) => ({
+        url: `/admin/user/${id}`,
+        method: "PATCH",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {
+          isAdmin: isAdmin,
+        },
+      }),
+      invalidatesTags: ["User"],
     }),
     updateProfile: builder.mutation({
       query: ({ name, email, password, token }) => ({
@@ -145,7 +184,7 @@ export const apiSlice = createApi({
           email: email,
         },
       }),
-      invalidatesTags: ["Summary"],
+      invalidatesTags: ["Summary", "User"],
     }),
     placeOrder: builder.mutation({
       query: (initialOrder) => ({
@@ -292,6 +331,7 @@ export const {
   usePasswordResetEmailMutation,
   useUpdatePasswordMutation,
   useUpdateProfileMutation,
+  useGetUsersQuery,
   useDeleteAccountMutation,
   usePlaceOrderMutation,
   useGetOrderByIdQuery,
@@ -304,4 +344,6 @@ export const {
   useUploadImageMutation,
   useCreateProductMutation,
   useDeleteProductMutation,
+  useDeleteUserMutation,
+  useUpdateUserMutation,
 } = apiSlice;

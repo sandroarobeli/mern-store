@@ -39,10 +39,8 @@ async function placeOrder(req, res, next) {
       },
     });
 
-    // console.log("user including orders", getUser); // test
     res.status(201).json(newOrder);
   } catch (error) {
-    console.log("error from controller", error); // test
     return next(
       new Error(
         error ? error : "Failed to process your order. Please try again later"

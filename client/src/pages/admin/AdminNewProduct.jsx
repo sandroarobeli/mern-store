@@ -129,7 +129,7 @@ export default function AdminNewProduct() {
           className="mx-auto max-w-screen-md"
           onSubmit={handleSubmit(productCreateHandler)}
         >
-          <h1 className="mb-4 text-xl">Create new product</h1>
+          <h1 className="mb-4 text-xl">New product</h1>
           <div className="mb-4">
             <label htmlFor="name">Name</label>
             <input

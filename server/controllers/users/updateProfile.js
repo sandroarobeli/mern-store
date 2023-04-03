@@ -40,7 +40,7 @@ async function updateProfile(req, res, next) {
       res.status(200).json(updatedUser);
     }
   } catch (error) {
-    return next(new Error(`Update failed: ${error.message}`));
+    return next(new Error(`Failed to update: ${error.message}`));
   }
 }
 

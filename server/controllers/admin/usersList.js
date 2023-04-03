@@ -1,8 +1,7 @@
 const prisma = require("../../db");
 
-async function deleteProduct(req, res, next) {
+async function getUsersList(req, res, next) {
   const { userId } = req.userData;
-  const { productId } = req.params;
 
   try {
     const currentUser = await prisma.user.findUnique({
@@ -22,14 +21,16 @@ async function deleteProduct(req, res, next) {
       );
     }
 
-    await prisma.product.delete({
-      where: { id: productId },
+    const users = await prisma.user.findMany({
+      // Shows newest products first
+      orderBy: {
+        createdAt: "desc",
+      },
     });
-
-    res.end();
+    res.status(200).json(users);
   } catch (error) {
-    return next(new Error(`Failed to delete product: ${error.message}`));
+    return next(new Error(`Failed to retrieve users: ${error.message}`));
   }
 }
 
-module.exports = deleteProduct;
+module.exports = getUsersList;

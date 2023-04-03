@@ -1,45 +1,41 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import {
-  useGetProductsQuery,
-  useDeleteProductMutation,
-} from "../../redux/apiSlice";
+import { useGetUsersQuery, useDeleteUserMutation } from "../../redux/apiSlice";
 import { selectToken } from "../../redux/userSlice";
+import DynamicTitle from "../../components/DynamicTitle";
 import AdminNav from "../../components/AdminNav";
 import AdminSearchBar from "../../components/AdminSearchBar";
-import DynamicTitle from "../../components/DynamicTitle";
 import DeleteModal from "../../components/DeleteModal";
 import DialogModal from "../../components/DialogModal";
 import Spinner from "../../components/Spinner";
 
-export default function AdminProducts() {
+export default function AdminUsers() {
   const location = useLocation();
   const { pathname } = location;
   const token = useSelector(selectToken);
   const [searchValue, setSearchValue] = useState("");
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [dialogModalOpen, setDialogModalOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState("");
+  const [userToDelete, setUserToDelete] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { data: products, isLoading, isError, error } = useGetProductsQuery();
+  const { data: users, isLoading, isError, error } = useGetUsersQuery(token);
 
-  const [deleteProduct, { isLoading: isDeleteLoading }] =
-    useDeleteProductMutation();
+  const [deleteUser, { isLoading: isDeleteLoading }] = useDeleteUserMutation();
 
   // Sets value for filtering through existing products
   const handleSearchValueChange = (event) => {
     setSearchValue(event.target.value.toLowerCase());
   };
 
-  const handleProductDelete = async () => {
+  const handleUserDelete = async () => {
     try {
       setDeleteModalOpen(false);
-      await deleteProduct({ id: productToDelete, token }).unwrap();
-      toast.success("Product deleted successfully");
+      await deleteUser({ id: userToDelete, token }).unwrap();
+      toast.success("User deleted successfully");
     } catch (error) {
       setErrorMessage(error.data.message); // Local Error state get populated by Redux error
       setDialogModalOpen(true);
@@ -51,22 +47,23 @@ export default function AdminProducts() {
     setErrorMessage("");
   };
 
+  // FROM HERE: EDIT USER PART AS IN EDIT PRODUCT PART. WATCH THE REST OF THE VIDEO!
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
-      <DynamicTitle title="Admin products" />
+      <DynamicTitle title="Admin users" />
       <AdminNav pathname={pathname} />
       <div className="overflow-x-auto md:col-span-3">
-        <h1 className="mb-4 text-xl">Products</h1>
+        <h1 className="mb-4 text-xl">Users</h1>
         <AdminSearchBar
           value={searchValue}
           onChange={handleSearchValueChange}
-          placeholder="Enter name or category.."
-          label="Search products"
+          placeholder="Enter name or email.."
+          label="Search users"
         />
         {isDeleteLoading && <Spinner />}
         {isLoading ? (
           <p className="text-lg animate-pulse text-blue-800">
-            Generating products..
+            Generating users..
           </p>
         ) : isError ? (
           <div className="alert-error">
@@ -80,32 +77,28 @@ export default function AdminProducts() {
                 <tr>
                   <th className="px-5 text-left">ID</th>
                   <th className="p-5 text-left">NAME</th>
-                  <th className="p-5 text-left">PRICE</th>
-                  <th className="p-5 text-left">CATEGORY</th>
-                  <th className="p-5 text-left">COUNT</th>
-                  <th className="p-5 text-left">RATING</th>
+                  <th className="p-5 text-left">EMAIL</th>
+                  <th className="p-5 text-left">ADMIN</th>
                   <th className="p-5 text-left">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map(
-                  (product) =>
-                    (product.name.toLowerCase().includes(searchValue) ||
-                      product.category.toLowerCase().includes(searchValue)) && (
-                      <tr key={product.id} className="border-b">
-                        <td className="p-5">{product.id.substring(20, 24)}</td>
-                        <td className="p-5">{product.name}</td>
-                        <td className="p-5">${product.price.toFixed(2)}</td>
-                        <td className="p-5">{product.category}</td>
-                        <td className="p-5">{product.inStock}</td>
-                        <td className="p-5">{product.rating}</td>
+                {users.map(
+                  (user) =>
+                    (user.name.toLowerCase().includes(searchValue) ||
+                      user.email.toLowerCase().includes(searchValue)) && (
+                      <tr key={user.id} className="border-b">
+                        <td className="p-5">{user.id.substring(20, 24)}</td>
+                        <td className="p-5">{user.name}</td>
+                        <td className="p-5">{user.email}</td>
+                        <td className="p-5">{user.isAdmin ? "YES" : "NO"}</td>
                         <td className="p-5">
-                          <Link to={`/admin/product/${product.id}`}>Edit</Link>
+                          <Link to={`/admin/user/${user.id}`}>Edit</Link>
                           &nbsp;
                           <button
                             className="text-red-500 hover:text-red-600 active:text-red-700"
                             onClick={() => {
-                              setProductToDelete(product.id);
+                              setUserToDelete(user.id);
                               setDeleteModalOpen(true);
                             }}
                           >
@@ -123,7 +116,7 @@ export default function AdminProducts() {
       <DeleteModal
         isOpen={deleteModalOpen}
         onCancel={() => setDeleteModalOpen(false)}
-        onDelete={handleProductDelete}
+        onDelete={handleUserDelete}
       />
       <DialogModal
         isOpen={dialogModalOpen}
