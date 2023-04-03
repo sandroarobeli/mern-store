@@ -50,7 +50,7 @@ export default function AdminOrders() {
       <DynamicTitle title="Admin orders" />
       <AdminNav pathname={pathname} />
       <div className="overflow-x-auto md:col-span-3">
-        <h1 className="ml-2 mb-4 text-xl">Admin Orders</h1>
+        <h1 className="ml-2 mb-4 text-xl">Orders</h1>
         <AdminSearchBar
           value={searchValue}
           onChange={handleSearchValueChange}

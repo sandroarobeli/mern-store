@@ -3,21 +3,27 @@ const { check } = require("express-validator");
 
 const checkAuthorization = require("../utils/checkAuthorization");
 const summary = require("../controllers/admin/summary");
+const getUsersList = require("../controllers/admin/usersList");
 const getOrdersList = require("../controllers/admin/ordersList");
 const updateProduct = require("../controllers/admin/updateProduct");
 const createProduct = require("../controllers/admin/createProduct");
 const deleteProduct = require("../controllers/admin/deleteProduct");
+const deleteUser = require("../controllers/admin/deleteUser");
+const updateUser = require("../controllers/admin/updateUser");
 const updateDeliveredStatus = require("../controllers/admin/updateDeliveredStatus");
 const signature = require("../controllers/admin/cloudinarySign");
 
 // Initializing the router object
 const router = express.Router();
 
-// Retrieve sales summary. Privileged, requires authorization
+// Retrieve sales summary. Privileged, requires authorization as Admin
 router.get("/summary", checkAuthorization, summary);
 
-// Retrieve complete orders list. Privileged, requires authorization
+// Retrieve complete orders list. Privileged, requires authorization as Admin
 router.get("/orders", checkAuthorization, getOrdersList);
+
+// Retrieve complete Users list. Privileged, requires authorization as Admin
+router.get("/users", checkAuthorization, getUsersList);
 
 // Update product. Privileged, requires authorization as Admin
 router.patch(
@@ -35,6 +41,9 @@ router.patch(
   checkAuthorization,
   updateProduct
 );
+
+// Update user. Privileged, requires authorization as Admin
+router.patch("/user/:updatedUserId", checkAuthorization, updateUser);
 
 // Create product. Privileged, requires authorization as Admin
 router.post(
@@ -55,6 +64,9 @@ router.post(
 
 // Delete product. Privileged, requires authorization as Admin
 router.delete("/product/:productId", checkAuthorization, deleteProduct);
+
+// Delete user. Privileged, requires authorization as Admin
+router.delete("/user/:deletedUserId", checkAuthorization, deleteUser);
 
 // Update order delivery status. Privileged, requires authorization as Admin
 router.patch("/order/:orderId", checkAuthorization, updateDeliveredStatus);

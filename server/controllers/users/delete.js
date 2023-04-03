@@ -32,7 +32,7 @@ async function deleteAccount(req, res, next) {
     });
     res.end();
   } catch (error) {
-    return next(new Error(`Deletion failed: ${error.message}`));
+    return next(new Error(`Failed to delete: ${error.message}`));
   }
 }
 

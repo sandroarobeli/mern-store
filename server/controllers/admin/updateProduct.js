@@ -50,7 +50,7 @@ async function updateProduct(req, res, next) {
 
     res.end();
   } catch (error) {
-    return next(new Error(`Update failed: ${error.message}`));
+    return next(new Error(`Failed to update: ${error.message}`));
   }
 }
 

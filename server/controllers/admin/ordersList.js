@@ -29,11 +29,7 @@ async function getOrdersList(req, res, next) {
     });
     res.status(200).json(orders);
   } catch (error) {
-    return next(
-      new Error(
-        `An error ocurred while loading order history: ${error.message}`
-      )
-    );
+    return next(new Error(`Failed to load order history: ${error.message}`));
   }
 }
 

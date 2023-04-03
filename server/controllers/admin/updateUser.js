@@ -1,8 +1,9 @@
 const prisma = require("../../db");
 
-async function deleteProduct(req, res, next) {
+async function updateUser(req, res, next) {
   const { userId } = req.userData;
-  const { productId } = req.params;
+  const { updatedUserId } = req.params;
+  const { isAdmin } = req.body;
 
   try {
     const currentUser = await prisma.user.findUnique({
@@ -13,6 +14,7 @@ async function deleteProduct(req, res, next) {
         isAdmin: true,
       },
     });
+
     // Ensures logged in user has Admin privileges
     if (!currentUser || !currentUser.isAdmin) {
       return next(
@@ -21,15 +23,17 @@ async function deleteProduct(req, res, next) {
         )
       );
     }
-
-    await prisma.product.delete({
-      where: { id: productId },
+    await prisma.user.update({
+      where: { id: updatedUserId },
+      data: {
+        isAdmin: isAdmin,
+      },
     });
 
     res.end();
   } catch (error) {
-    return next(new Error(`Failed to delete product: ${error.message}`));
+    return next(new Error(`Failed to update: ${error.message}`));
   }
 }
 
-module.exports = deleteProduct;
+module.exports = updateUser;

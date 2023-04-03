@@ -28,7 +28,7 @@ async function updatePaidStatus(req, res, next) {
 
     res.end();
   } catch (error) {
-    return next(new Error(error ? error : "Order status update failed."));
+    return next(new Error(error ? error : "Failed to update order status."));
   }
 }
 

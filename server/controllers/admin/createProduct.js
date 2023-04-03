@@ -46,7 +46,7 @@ async function createProduct(req, res, next) {
 
     res.end();
   } catch (error) {
-    return next(new Error(`Product creation failed: ${error.message}`));
+    return next(new Error(`Failed to create product: ${error.message}`));
   }
 }
 

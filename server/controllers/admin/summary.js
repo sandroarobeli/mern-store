@@ -49,9 +49,7 @@ async function summary(req, res, next) {
 
     res.status(200).json(summary);
   } catch (error) {
-    return next(
-      new Error(`Error ocurred while loading the summary: ${error.message}`)
-    );
+    return next(new Error(`Failed to load the summary: ${error.message}`));
   }
 }
 
