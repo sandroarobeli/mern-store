@@ -33,6 +33,7 @@ import AdminProductEdit from "./pages/admin/AdminProductEdit";
 import AdminNewProduct from "./pages/admin/AdminNewProduct";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminUserEdit from "./pages/admin/AdminUserEdit";
+import Search from "./pages/Search";
 import {
   selectUserAdmin,
   selectToken,
@@ -94,6 +95,7 @@ function App() {
           <Route path="cart" exact element={<Cart />} />
           <Route path="login" exact element={<Login />} />
           <Route path="register" exact element={<Register />} />
+          <Route path="search" exact element={<Search />} />
           {token && (
             <Route
               path="shipping-address"

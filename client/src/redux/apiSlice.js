@@ -12,6 +12,34 @@ export const apiSlice = createApi({
       query: () => "/products",
       providesTags: ["Product"],
     }),
+    getSearchResults: builder.mutation({
+      query: ({
+        query,
+        category,
+        brand,
+        price,
+        rating,
+        sort,
+        page,
+        limit,
+      }) => ({
+        url: "/products/search",
+        method: "POST",
+        body: {
+          query: query,
+          category: category,
+          brand: brand,
+          price: price,
+          rating: rating,
+          sort: sort,
+          page: page,
+          limit: limit,
+        },
+      }),
+    }),
+    getFilters: builder.query({
+      query: () => "/products/filter",
+    }),
     updateProduct: builder.mutation({
       query: ({
         id,
@@ -323,6 +351,8 @@ export const apiSlice = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetSearchResultsMutation,
+  useGetFiltersQuery,
   useUpdateProductMutation,
   useGoogleLoginMutation,
   useCredentialLoginMutation,
