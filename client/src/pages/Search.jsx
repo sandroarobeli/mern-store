@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-// THEME, MAP, REVIEW HANDLING, NO COMMENT COPY PUSH, PERFORMANCE TESTING, DEPLOY...
+// INDEX META, NO COMMENT COPY PUSH, PERFORMANCE TESTING, DEPLOY...
+
 import {
   useGetFiltersQuery,
   useGetSearchResultsMutation,

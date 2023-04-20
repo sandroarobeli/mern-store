@@ -6,7 +6,7 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_SERVER_DOMAIN}/api`,
   }),
-  tagTypes: ["Product", "Order", "Summary", "User"],
+  tagTypes: ["Product", "Order", "Summary", "User", "Comment"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: () => "/products",
@@ -39,6 +39,26 @@ export const apiSlice = createApi({
     }),
     getFilters: builder.query({
       query: () => "/products/filter",
+    }),
+    getComments: builder.query({
+      query: (id) => `/products/${id}/comments`,
+      providesTags: ["Comment"],
+    }),
+    postComments: builder.mutation({
+      query: ({ id, token, content, rating }) => ({
+        url: `/products/${id}/comments`,
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: {
+          content: content,
+          rating: rating,
+        },
+      }),
+      invalidatesTags: ["Comment", "Product"],
     }),
     updateProduct: builder.mutation({
       query: ({
@@ -353,6 +373,8 @@ export const {
   useGetProductsQuery,
   useGetSearchResultsMutation,
   useGetFiltersQuery,
+  useGetCommentsQuery,
+  usePostCommentsMutation,
   useUpdateProductMutation,
   useGoogleLoginMutation,
   useCredentialLoginMutation,
