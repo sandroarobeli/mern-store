@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Rating } from "react-simple-star-rating";
 
 import AddToCartButton from "./AddToCartButton";
 
@@ -22,8 +23,16 @@ export default function ProductItem({ product }) {
         ) : null}
       </Link>
       <div className="flex flex-col items-center justify-center p-5">
-        <Link to={`/product/${product.slug}`}>
+        <Link to={`/product/${product.slug}`} className="text-center">
           <h2 className="text-lg">{product.name}</h2>
+          <Rating
+            initialValue={product.rating}
+            allowFraction
+            readonly
+            fillColor="#fcd34d"
+            size={25}
+            SVGstyle={{ display: "inline" }}
+          />
         </Link>
         <p className="mb-2">{product.brand}</p>
         <p>${product.price.toFixed(2)}</p>

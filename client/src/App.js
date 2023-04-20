@@ -175,7 +175,7 @@ function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="dark" // "light"
+          theme="light" // "dark"
         />
       </Layout>
     </PayPalScriptProvider>
