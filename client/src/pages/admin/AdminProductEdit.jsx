@@ -26,42 +26,29 @@ export default function AdminProductEdit() {
     handleSubmit,
     register,
     formState: { errors },
-    // getValues,
     setValue,
-    // reset,
   } = useForm();
 
   const { product, isLoading, isError, error } = useGetProductsQuery(
     undefined,
     {
       selectFromResult: ({ data, isLoading, isError, error }) => ({
-        // We can optionally include the other metadata fields from the result here
         isLoading: isLoading,
         isError: isError,
         error: error,
-        // Include a field called `product` in the hook result object,
-        // which will be a filtered product of products
         product: data?.find((product) => product.id === id),
       }),
     }
   );
 
   const {
-    data: credentials, // { signature, timestamp },
+    data: credentials,
     isError: isSignatureError,
     error: signatureError,
   } = useGetSignatureQuery(token);
 
-  const [
-    uploadImage,
-    {
-      // data: imageOnCloud,
-      isLoading: isUploading,
-      // isSuccess: uploadSuccess,
-      isError: isUploadError,
-      // error: uploadError,
-    },
-  ] = useUploadImageMutation();
+  const [uploadImage, { isLoading: isUploading, isError: isUploadError }] =
+    useUploadImageMutation();
 
   const [updateProduct, { isLoading: updateLoading }] =
     useUpdateProductMutation();
@@ -72,7 +59,6 @@ export default function AdminProductEdit() {
     setValue("slug", product.slug);
     setValue("price", product.price);
     setValue("image", product.image);
-    // setValue("featuredImage", product.featuredImage); // Available later
     setValue("category", product.category);
     setValue("brand", product.brand);
     setValue("inStock", product.inStock);
@@ -107,7 +93,6 @@ export default function AdminProductEdit() {
         toast.success("Image upload successful");
       }
     } catch (error) {
-      console.log("error from catch", error);
       setErrorMessage(error.data.message);
       setModalOpen(true);
     }
@@ -139,7 +124,7 @@ export default function AdminProductEdit() {
       toast.success("Product updated successfully");
       navigate("/admin/products");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };

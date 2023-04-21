@@ -65,8 +65,6 @@ async function googleRegister(req, res, next) {
         // Here in the format it was originally created. otherwise we attach "NA"
         image: profile?.picture ? profile.picture : "NA",
         token: token,
-        // Sets time to 15 Seconds for TESTING
-        // expiration: new Date().getTime() + 1000 * 15
         // Sets time to 2 Hours for THIS application
         expiration: new Date().getTime() + 1000 * 60 * 60 * 2,
       });

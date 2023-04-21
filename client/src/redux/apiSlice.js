@@ -134,7 +134,6 @@ export const apiSlice = createApi({
       query: (initialGoogleCredential) => ({
         url: "/users/google-login",
         method: "POST",
-        // Include the entire googleResponse.credential object as the body of the request
         body: initialGoogleCredential,
       }),
     }),
@@ -248,8 +247,6 @@ export const apiSlice = createApi({
       invalidatesTags: ["Summary"],
     }),
     getOrderById: builder.query({
-      // REMEMBER: IF I NEED MORE THAN ONE ARGUMENT IN THE QUERY BELOW,
-      // I MUST INPUT IT AS AN OBJECT!!!
       query: ({ id, token }) => ({
         url: `/orders/${id}`,
         method: "GET",

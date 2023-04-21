@@ -13,7 +13,6 @@ export default function Home() {
     error,
   } = useGetProductsQuery();
 
-  console.log("products", products); // test
   return (
     <div>
       <DynamicTitle title="Home" />

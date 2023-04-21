@@ -7,7 +7,7 @@ export default function Spinner() {
         style={{ border: "1px solid green" }}
         strokeColor="#2563EB"
         strokeWidth="5"
-        animationDuration="1" // ".75" default
+        animationDuration="1"
         width="120"
         visible={true}
       />

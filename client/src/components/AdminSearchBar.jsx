@@ -1,4 +1,4 @@
-import SearchIcon from "./SearchIcon";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export default function AdminSearchBar({
   value,
@@ -22,7 +22,7 @@ export default function AdminSearchBar({
           onChange={onChange}
         />
         <i className="-ml-8 text-gray-400">
-          <SearchIcon />
+          <MagnifyingGlassIcon />
         </i>
       </div>
     </div>

@@ -17,28 +17,9 @@ export default function AdminOrders() {
   const {
     data: orders,
     isLoading,
-    // isFetching,
-    // isSuccess,
     isError,
     error,
-    // refetch,
   } = useGetAdminOrdersQuery(token);
-
-  // Sorts orders by date of creation from newest to oldest
-  // const sortedOrders = useMemo(
-  //   () =>
-  //     orders
-  //       ?.map((order) => {
-  //         return {
-  //           ...order,
-  //           createdAt: Date.parse(order.createdAt),
-  //         };
-  //       })
-  //       .sort((a, b) => b.createdAt - a.createdAt),
-  //   [orders]
-  // );
-
-  // console.log(sortedOrders); // test
 
   // Sets value for filtering through existing orders
   const handleSearchValueChange = (event) => {

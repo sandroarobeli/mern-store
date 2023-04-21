@@ -45,8 +45,6 @@ export default function Cart() {
       return;
     }
     dispatch(cartAddItem({ ...item, quantity: quantityAdded }));
-
-    // Deploy a mini modal to show user a product has been added
     toast.success("Quantity adjusted");
   };
 

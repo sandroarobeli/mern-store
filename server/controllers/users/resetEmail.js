@@ -13,8 +13,6 @@ const prisma = require("../../db");
 const generateResetLink = require("../../utils/generateResetLink");
 
 async function resetEmail(req, res, next) {
-  // Middleware registered in the routes gets invoked here
-  // If returned errors object isn't empty, error is passed down the chain via next()
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -25,10 +23,10 @@ async function resetEmail(req, res, next) {
   const { email } = req.body;
 
   try {
-    // Checking if email already exists
     const existingUser = await prisma.user.findUnique({
       where: { email: email },
     });
+
     if (!existingUser) {
       return next(
         new Error(
@@ -44,7 +42,6 @@ async function resetEmail(req, res, next) {
         process.env.SECRET_TOKEN_KEY,
         {
           expiresIn: "15m",
-          // expiresIn: "2m", // Set to 2 minutes for testing purposes
         }
       );
     } catch (error) {

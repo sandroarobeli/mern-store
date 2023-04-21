@@ -41,7 +41,7 @@ export default function AdminProducts() {
       await deleteProduct({ id: productToDelete, token }).unwrap();
       toast.success("Product deleted successfully");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setDialogModalOpen(true);
     }
   };

@@ -7,11 +7,9 @@ const prisma = require("../../db");
 const convertDocumentToObject = require("../../utils/docToObject");
 
 async function register(req, res, next) {
-  // Middleware registered in the routes gets invoked here
-  // If returned errors object isn't empty, error is passed down the chain via next()
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return next(new Error("Invalid inputs entered. Please check your data")); // 422
+    return next(new Error("Invalid inputs entered. Please check your data"));
   }
 
   const { name, email, password } = req.body;
@@ -20,6 +18,7 @@ async function register(req, res, next) {
     const existingUser = await prisma.user.findUnique({
       where: { email: email },
     });
+
     if (existingUser) {
       return next(new Error("The User already exists."));
     }
@@ -45,8 +44,6 @@ async function register(req, res, next) {
       ...convertDocumentToObject(newUser),
       image: "NA",
       token: token,
-      // Sets time to 15 Seconds for TESTING
-      // expiration: new Date().getTime() + 1000 * 15
       // Sets time to 2 Hours for THIS application
       expiration: new Date().getTime() + 1000 * 60 * 60 * 2,
     });

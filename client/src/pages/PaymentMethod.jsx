@@ -19,13 +19,7 @@ export default function PaymentMethod() {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const {
-    handleSubmit,
-    register,
-    setValue,
-    // SINCE RADIO OPTIONS ARE MUTUALLY EXCLUSIVE, THERE WOULD ALWAYS BE 2 RED ERROR
-    // MESSAGES DISPLAYED. THUS I OPTED TO USE ERROR MODAL
-  } = useForm();
+  const { handleSubmit, register, setValue } = useForm();
 
   useEffect(() => {
     if (!shippingAddress.address) {
@@ -44,10 +38,6 @@ export default function PaymentMethod() {
     navigate("/place-order");
   };
 
-  // THE KEY TO HAVING MUTUALLY EXCLUSIVE RADIO BUTTON OPTIONS IS TO
-  // REGISTER SAME NAMED PROPERTY. LIKE FOR ALL 3 RADIO BUTTONS, ALL 3
-  // PROPERTIES MUST BE THE SAME (Instead of: firstName: 'James', lastName: 'Bond'
-  // We must have: firstName: 'James', lastName: 'James'). IN THIS CASE: localPaymentMethod
   return (
     <CheckoutWizard activeStep={2}>
       <DynamicTitle title="Payment method" />
@@ -87,7 +77,7 @@ export default function PaymentMethod() {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Selection Fail"
-        description="Payment method is required" // This message is not dynamic
+        description="Payment method is required"
         className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
       />
     </CheckoutWizard>

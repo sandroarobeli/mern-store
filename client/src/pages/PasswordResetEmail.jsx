@@ -28,7 +28,7 @@ export default function PasswordResetEmail() {
       await passwordResetEmail({ email }).unwrap();
       navigate("/confirmation");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };
@@ -59,7 +59,7 @@ export default function PasswordResetEmail() {
               errors.email ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="email"
-            autoFocus // First field gets autoFocus
+            autoFocus
             {...register("email", {
               required: "Please enter email",
               pattern: {

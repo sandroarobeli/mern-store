@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-// INDEX META, NO COMMENT COPY PUSH, PERFORMANCE TESTING, DEPLOY...
 
 import {
   useGetFiltersQuery,
@@ -48,7 +47,6 @@ const ratings = [
     value: 5,
   },
 ];
-// const ratings = [1, 2, 3, 4, 5];
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();

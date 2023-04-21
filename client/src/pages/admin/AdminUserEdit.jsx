@@ -22,12 +22,9 @@ export default function AdminProductEdit() {
 
   const { user, isLoading, isError, error } = useGetUsersQuery(token, {
     selectFromResult: ({ data, isLoading, isError, error }) => ({
-      // We can optionally include the other metadata fields from the result here
       isLoading: isLoading,
       isError: isError,
       error: error,
-      // Include a field called `user` in the hook result object,
-      // which will be a filtered user of users
       user: data?.find((user) => user.id === id),
     }),
   });
@@ -48,7 +45,7 @@ export default function AdminProductEdit() {
       toast.success("User updated successfully");
       navigate("/admin/users");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };

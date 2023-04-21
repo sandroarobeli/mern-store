@@ -32,7 +32,7 @@ router.patch(
     check("name").not().isEmpty().trim().escape(),
     check("slug").not().isEmpty().trim().escape(),
     check("price").isFloat(),
-    check("image").not().isEmpty(), //   .trim().escape(), // escape Destroys the path!
+    check("image").not().isEmpty(),
     check("category").not().isEmpty().trim().escape(),
     check("brand").not().isEmpty().trim().escape(),
     check("inStock").isInt(),
@@ -52,7 +52,7 @@ router.post(
     check("name").not().isEmpty().trim().escape(),
     check("slug").not().isEmpty().trim().escape(),
     check("price").isFloat(),
-    check("image").not().isEmpty(), //   .trim().escape(), // escape Destroys the path!
+    check("image").not().isEmpty(),
     check("category").not().isEmpty().trim().escape(),
     check("brand").not().isEmpty().trim().escape(),
     check("inStock").isInt(),

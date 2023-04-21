@@ -3,9 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
 import { toast } from "react-toastify";
-// import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-// <ChevronDownIcon className="h-7 w-7 ml-4" />
-// scale-150 ease-in-out duration-300
+
 import {
   useGetProductsQuery,
   useGetCommentsQuery,
@@ -26,7 +24,6 @@ export default function Product() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showReviews, setShowReviews] = useState(true);
 
-  console.log("showReviews", showReviews); // test
   const { product } = useGetProductsQuery(undefined, {
     selectFromResult: ({ data }) => ({
       product: data?.find((product) => product.slug === slug),
@@ -58,7 +55,7 @@ export default function Product() {
       setContent("");
       setRating(0);
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };

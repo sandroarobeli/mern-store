@@ -10,22 +10,15 @@ const adminRoutes = require("./routes/admin");
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Register middleware
-// app.use(
-//   cors({
-//     origin: ["http://localhost:3000"],
-//     methods: "GET,POST,PATCH, DELETE,OPTIONS",
-//   })
-// );
-app.use(cors()); // test
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Register individual custom routers
-app.use("/api/users", userRoutes); // This url triggers userRoutes
-app.use("/api/products", productRoutes); // This url triggers productRoutes
-app.use("/api/orders", orderRoutes); // This url triggers orderRoutes
-app.use("/api/admin", adminRoutes); // This url triggers adminRoutes
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Handling errors for unsupported routes
 app.use((req, res, next) => {

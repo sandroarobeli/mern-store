@@ -41,16 +41,11 @@ export default function AdminDashboard() {
   const [year, setYear] = useState(new Date().getFullYear().toString());
   const [filteredData, setFilteredData] = useState([]);
 
-  // console.log("filtered data", filteredData); // test
-  console.log("current location", pathname); // test
   const {
     data: summary,
     isLoading,
-    // isFetching,
-    // isSuccess,
     isError,
     error,
-    // refetch,
   } = useGetAdminSummaryQuery(token);
 
   // Filters summary.chartingData for the default (current) year on page load.

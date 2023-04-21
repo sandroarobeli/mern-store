@@ -34,13 +34,13 @@ export default function DeleteAccount() {
   const submitHandler = async ({ email }) => {
     try {
       await deleteAccount({ userId, email, token }).unwrap();
-      // Deleting User's orders will not be performed at the same time.
+      // Deleting User's orders will not be performed concurrently.
       // That would affect admins ability to access sales & financial stats
       dispatch(logout());
       toast.success("Account has been deleted");
       navigate("/");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };

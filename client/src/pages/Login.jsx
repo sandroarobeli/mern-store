@@ -3,12 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 
-import {
-  // login,
-  clearError,
-  // selectUserStatus,
-  selectToken,
-} from "../redux/userSlice";
+import { clearError, selectToken } from "../redux/userSlice";
 import {
   useGoogleLoginMutation,
   useCredentialLoginMutation,
@@ -27,12 +22,8 @@ export default function Login() {
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [googleLogin, { data: googleUser }] = useGoogleLoginMutation();
-  const [credentialLogin, { data: credentialUser, isLoading }] =
-    useCredentialLoginMutation();
-
-  console.log("googleUser", googleUser); // test
-  console.log("credentialUser", credentialUser); // test
+  const [googleLogin] = useGoogleLoginMutation();
+  const [credentialLogin, { isLoading }] = useCredentialLoginMutation();
 
   const {
     handleSubmit,
@@ -40,14 +31,11 @@ export default function Login() {
     formState: { errors },
     reset,
   } = useForm();
-  // IF LOGGED IN (THERE IS ACTIVE SESSION), ==> REDIRECT TO whence (IF COMING FROM CART),
-  // OTHERWISE, ==> REDIRECT TO HOME (IF COMING FROM SOMEWHERE ELSE) LIKE
-  // IF I WENT TO THE STORE AND INSTEAD OF BROWSING FIRST, WENT STRAIGHT TO LOGIN PAGE
-  // NOTE: HANDLES CREDENTIALS LOGIN
+
   useEffect(() => {
     if (token) {
       console.log("session token: ", token);
-      navigate(whence || "/"); // OR router.push(whence || '/')
+      navigate(whence || "/");
     }
   }, [navigate, token, whence]);
 
@@ -56,12 +44,11 @@ export default function Login() {
       try {
         await credentialLogin({ email, password }).unwrap();
       } catch (error) {
-        setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+        setErrorMessage(error.data.message);
         setModalOpen(true);
       }
     }
   };
-  // NOTE: action.payload === error
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleGoogleLogin = async (googleResponse) => {
@@ -69,18 +56,12 @@ export default function Login() {
       const userData = await googleLogin({
         credential: googleResponse.credential,
       }).unwrap();
-      // Non status-500 error. for example, google user trying in is not
-      // in the DB and gets prompted to sign up
+
       if (!userData) {
         throw new Error(userData.message);
       }
-      // await credentialLogin({
-      //   email: userData.email,
-      //   password: bcrypt.hashSync("123456"), // some default password for google logged in users
-      // }).unwrap();
-      // Status-500 error presumably
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };
@@ -102,8 +83,6 @@ export default function Login() {
         logo_alignment: "center",
         width: 250,
       });
-
-      // google.accounts.id.prompt()
     }
   }, [handleGoogleLogin]);
 
@@ -131,7 +110,7 @@ export default function Login() {
               errors.email ? "ring-red-500" : "ring-indigo-300"
             }`}
             id="email"
-            autoFocus // First field gets autoFocus
+            autoFocus
             {...register("email", {
               required: "Please enter email",
               pattern: {

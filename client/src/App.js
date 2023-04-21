@@ -63,7 +63,6 @@ function App() {
   useIdleTimer({
     onIdle,
     timeout: 1000 * 60 * 15, // 15 minutes to inactivity logout
-    // timeout: 1000 * 10 // test
     throttle: 500,
   });
 
@@ -162,7 +161,6 @@ function App() {
             element={<ExpiredPasswordLink />}
           />
           <Route path="*" element={<NotFound />} />
-          {/*<Route path="*" element={<Navigate replace to="" />} /> This is Catch all*/}
         </Routes>
         <ToastContainer
           className="toast-message"
@@ -175,7 +173,7 @@ function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light" // "dark"
+          theme="light"
         />
       </Layout>
     </PayPalScriptProvider>

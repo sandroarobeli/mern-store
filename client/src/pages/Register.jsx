@@ -22,12 +22,8 @@ export default function Register() {
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [googleRegister, { data: googleUser }] = useGoogleRegisterMutation();
-  const [credentialRegister, { data: credentialUser, isLoading }] =
-    useCredentialRegisterMutation();
-
-  console.log("googleUser", googleUser); // test
-  console.log("credentialUser", credentialUser); // test
+  const [googleRegister] = useGoogleRegisterMutation();
+  const [credentialRegister, { isLoading }] = useCredentialRegisterMutation();
 
   const {
     handleSubmit,
@@ -48,8 +44,7 @@ export default function Register() {
       try {
         await credentialRegister({ name, email, password }).unwrap();
       } catch (error) {
-        console.log(error); // test
-        setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+        setErrorMessage(error.data.message);
         setModalOpen(true);
       }
     }
@@ -61,14 +56,11 @@ export default function Register() {
       const userData = await googleRegister({
         credential: googleResponse.credential,
       }).unwrap();
-      // Non status-500 error. for example, google user trying in is not
-      // in the DB and gets prompted to sign up
       if (!userData) {
         throw new Error(userData.message);
       }
-      console.log("google register userData", userData); // test
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };
@@ -90,8 +82,6 @@ export default function Register() {
         logo_alignment: "center",
         width: 250,
       });
-
-      // google.accounts.id.prompt()
     }
   }, [handleGoogleRegister]);
 

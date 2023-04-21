@@ -4,7 +4,7 @@ require("dotenv").config();
 async function passwordResetLinkValidate(req, res, next) {
   try {
     const { emailToken } = req.params;
-    // No token for some reason
+
     if (!emailToken) {
       return next(
         new Error("This link is invalid. Please submit your email again.")
@@ -21,7 +21,7 @@ async function passwordResetLinkValidate(req, res, next) {
   } catch (error) {
     return next(
       new Error(`Invalid link. Please try again later: ${error.message}`)
-    ); // 500
+    );
   }
 }
 
