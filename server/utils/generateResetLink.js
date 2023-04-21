@@ -19,7 +19,6 @@ async function generateResetLink(email, emailToken) {
     });
     console.log("Reset link Email sent successfully to: " + email);
   } catch (error) {
-    console.log(error.response.body); // test
     throw new Error("Email sending failed");
   }
 }

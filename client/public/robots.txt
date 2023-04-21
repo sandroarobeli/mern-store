@@ -1,7 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-Sitemap: https://maxcarriers.us/sitemap.xml # My future domain will go here
+Sitemap: https://lazikadigital.com/sitemap.xml 
 
 
 

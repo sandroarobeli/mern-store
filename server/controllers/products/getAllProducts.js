@@ -3,7 +3,6 @@ const prisma = require("../../db");
 async function getAllProducts(req, res, next) {
   try {
     const products = await prisma.product.findMany({
-      // Shows newest products first
       orderBy: {
         createdAt: "desc",
       },

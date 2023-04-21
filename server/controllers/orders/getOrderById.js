@@ -9,15 +9,6 @@ async function getOrderById(req, res, next) {
       where: {
         id: orderId,
       },
-      // include: {
-      //   // If needs to be included, make sure only isAdmin gets returned!!
-      //   owner: true,
-      //   owner: {
-      //     select: {
-      //       isAdmin: true,
-      //     },
-      //   },
-      // },
     });
     const currentUser = await prisma.user.findUnique({
       where: {

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"; // , createAsyncThunk
+import { createSlice } from "@reduxjs/toolkit";
 
 const productSlice = createSlice({
   name: "product",

@@ -1,7 +1,6 @@
 const prisma = require("../../db");
 
 async function placeOrder(req, res, next) {
-  // userData gets added to request object by authorization module
   const { userId } = req.userData;
 
   try {

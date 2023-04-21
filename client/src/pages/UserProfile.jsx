@@ -27,11 +27,8 @@ export default function UserProfile() {
   const [errorMessage, setErrorMessage] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const [updateProfile, { data: updatedUser, isLoading }] =
-    useUpdateProfileMutation();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const [credentialLogin] = useCredentialLoginMutation();
-
-  console.log("Updated Profile", updatedUser);
 
   const {
     handleSubmit,
@@ -61,7 +58,7 @@ export default function UserProfile() {
       toast.success("Profile updated successfully!");
       navigate("/");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };

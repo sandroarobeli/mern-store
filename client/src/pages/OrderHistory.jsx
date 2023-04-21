@@ -1,4 +1,3 @@
-// import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -9,34 +8,15 @@ import DynamicTitle from "../components/DynamicTitle";
 
 export default function OrderHistory() {
   const token = useSelector(selectToken);
-  const userId = useSelector(selectUserId); // RESTORE
+  const userId = useSelector(selectUserId);
 
   const {
     data: orders,
     isLoading,
-    // isFetching,
-    // isSuccess,
     isError,
     error,
-    // refetch,
   } = useGetOrderHistoryQuery({ token, userId });
 
-  // Sorts orders by date of creation from newest to oldest
-  // const sortedOrders = useMemo(
-  //   () =>
-  //     orders
-  //       ?.map((order) => {
-  //         return {
-  //           ...order,
-  //           createdAt: Date.parse(order.createdAt),
-  //         };
-  //       })
-  //       .sort((a, b) => b.createdAt - a.createdAt),
-  //   [orders]
-  // );
-
-  // console.log("From History errors:", error); // test
-  // console.log("Order History:", orders); // test
   return (
     <div>
       <DynamicTitle title="Order history" />
@@ -102,18 +82,3 @@ export default function OrderHistory() {
     </div>
   );
 }
-
-/*
-<DialogModal
-            isOpen={isError} // set true for testing
-            onClose={refetch}
-            title="An Error has ocurred"
-            description={
-              error?.toString()
-                ? error.toString()
-                : "An error ocurred while loading your order history. Please try again later"
-            }
-            className="inline-flex justify-center border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-gray-900 error-button"
-          />
-
-*/

@@ -31,10 +31,6 @@ export default function AddToCartButton({ product }) {
     }
   );
 
-  console.log("from addToCartButton:");
-  console.log("product", currentlyUnsoldProduct); // test
-  console.log("isFetching", isFetching); // test
-
   const addToCartHandler = async () => {
     // refetch here so nothing gets added before unsold quantity is determined!
     refetch();

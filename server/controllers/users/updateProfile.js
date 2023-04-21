@@ -5,8 +5,6 @@ require("dotenv").config();
 const prisma = require("../../db");
 
 async function updateProfile(req, res, next) {
-  // Middleware registered in the routes gets invoked here
-  // If returned errors object isn't empty, error is passed down the chain via next()
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new Error("Invalid inputs entered. Please check your data")); // 422
@@ -16,9 +14,6 @@ async function updateProfile(req, res, next) {
   const { name, email, password } = req.body;
 
   try {
-    // const currentUser = await prisma.user.findUnique({
-    //   where: { id: userId },
-    // });
     const anotherUser = await prisma.user.findUnique({
       where: { email: email },
     });

@@ -25,9 +25,7 @@ export default function AdminNewProduct() {
     handleSubmit,
     register,
     formState: { errors },
-    // getValues,
     setValue,
-    // reset,
   } = useForm();
 
   const {
@@ -36,16 +34,8 @@ export default function AdminNewProduct() {
     error: signatureError,
   } = useGetSignatureQuery(token);
 
-  const [
-    uploadImage,
-    {
-      // data: imageOnCloud,
-      isLoading: isUploading,
-      // isSuccess: uploadSuccess,
-      isError: isUploadError,
-      // error: uploadError,
-    },
-  ] = useUploadImageMutation();
+  const [uploadImage, { isLoading: isUploading, isError: isUploadError }] =
+    useUploadImageMutation();
 
   const [createProduct, { isLoading: createLoading }] =
     useCreateProductMutation();
@@ -72,14 +62,13 @@ export default function AdminNewProduct() {
         );
         setModalOpen(true);
       }
-      console.log("imageOnCloud from Create", imageOnCloud); // test
+
       // Change url in image field from old to new url from cloudinary
       if (imageOnCloud) {
         setValue(imageField, imageOnCloud.secure_url);
         toast.success("Image upload successful");
       }
     } catch (error) {
-      console.log("error from catch", error);
       setErrorMessage(error.data.message);
       setModalOpen(true);
     }
@@ -110,7 +99,7 @@ export default function AdminNewProduct() {
       toast.success("Product created successfully");
       navigate("/admin/products");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setModalOpen(true);
     }
   };

@@ -4,7 +4,6 @@
 function convertDocumentToObject(doc) {
   doc.id = doc.id.toString();
   doc.createdAt = doc.createdAt.toString();
-  // doc.updatedAt = doc.updatedAt.toString();
   return doc;
 }
 

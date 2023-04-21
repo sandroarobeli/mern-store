@@ -25,22 +25,13 @@ export default function Order() {
   const {
     data: order,
     isLoading,
-    // isFetching,
-    // isSuccess,
     isError,
     error: initialError,
-    // refetch,
   } = useGetOrderByIdQuery({ id, token });
 
   const [updatePaidStatus] = useUpdatePaidStatusMutation();
-  const [
-    updateDeliveredStatus,
-    {
-      isLoading: isDeliveryLoading,
-      // isError: isDeliveryError,
-      // error: deliveryError
-    },
-  ] = useUpdateDeliveredStatusMutation();
+  const [updateDeliveredStatus, { isLoading: isDeliveryLoading }] =
+    useUpdateDeliveredStatusMutation();
 
   const createOrder = (data, actions) => {
     return actions.order
@@ -99,7 +90,7 @@ export default function Order() {
       setModalOpen(true);
     }
   };
-  // order.paymentMethod === "PayPal / Credit Card" &&
+
   return (
     <>
       <DynamicTitle title="Order review & payment" />

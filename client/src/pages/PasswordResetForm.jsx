@@ -31,10 +31,9 @@ export default function PasswordResetForm() {
       try {
         await updatePassword({ email, password }).unwrap();
         toast.success("Update Successful!");
-        navigate("/login"); // test
+        navigate("/login");
       } catch (error) {
-        console.log(error); // test
-        setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+        setErrorMessage(error.data.message);
         setModalOpen(true);
       }
     }

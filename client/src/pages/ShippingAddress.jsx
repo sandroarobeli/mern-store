@@ -32,7 +32,6 @@ export default function ShippingAddress() {
   }, [setValue, shippingAddress]);
 
   const submitHandler = ({ fullName, address, city, state, zip, phone }) => {
-    // console.log("dispatch: ", fullName, address, city, state, zip, phone);
     dispatch(
       saveShippingAddress({
         fullName,
@@ -43,7 +42,6 @@ export default function ShippingAddress() {
         phone,
       })
     );
-    // Redirection to payment-method selection screen
     navigate("/payment-method");
   };
 

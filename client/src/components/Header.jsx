@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 import QuantityBadge from "./QuantityBadge";
 import UserBadge from "./UserBadge";
-import SearchIcon from "./SearchIcon";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function Header() {
             id="button-addon"
             className="rounded rounded-tl-none rounded-bl-none p-1 bg-amber-300 text-sm dark:text-black"
           >
-            <SearchIcon className="h-5 w-5"></SearchIcon>
+            <MagnifyingGlassIcon className="h-5 w-5" />
           </button>
         </form>
         <div>

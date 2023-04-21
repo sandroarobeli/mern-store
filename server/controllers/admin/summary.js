@@ -38,7 +38,7 @@ async function summary(req, res, next) {
         },
       ],
     });
-    // console.log("sorted data", orders); // test
+
     const summary = {
       productsCount,
       usersCount,

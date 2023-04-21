@@ -25,7 +25,7 @@ export default function PlaceOrder() {
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [placeOrder, { isLoading }] = usePlaceOrderMutation(); // data: order comes from async
+  const [placeOrder, { isLoading }] = usePlaceOrderMutation();
 
   // Auxillary rounding function
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
@@ -62,7 +62,6 @@ export default function PlaceOrder() {
           grandTotal,
         }).unwrap();
         await dispatch(clearCartItems());
-        console.log("newOrder from controller", order); // test
         navigate(`/order/${order.id}`);
       } catch (error) {
         setErrorMessage(error.data.message); // Local Error state get populated by Redux error
@@ -195,7 +194,7 @@ export default function PlaceOrder() {
         </div>
       )}
       <DialogModal
-        isOpen={modalOpen} // true for testing
+        isOpen={modalOpen}
         onClose={handleErrorClear}
         title="Order processing error"
         description={errorMessage}

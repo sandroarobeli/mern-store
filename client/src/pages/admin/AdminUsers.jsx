@@ -37,7 +37,7 @@ export default function AdminUsers() {
       await deleteUser({ id: userToDelete, token }).unwrap();
       toast.success("User deleted successfully");
     } catch (error) {
-      setErrorMessage(error.data.message); // Local Error state get populated by Redux error
+      setErrorMessage(error.data.message);
       setDialogModalOpen(true);
     }
   };
@@ -47,7 +47,6 @@ export default function AdminUsers() {
     setErrorMessage("");
   };
 
-  // FROM HERE: EDIT USER PART AS IN EDIT PRODUCT PART. WATCH THE REST OF THE VIDEO!
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-5">
       <DynamicTitle title="Admin users" />

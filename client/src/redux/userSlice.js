@@ -61,24 +61,15 @@ const userSlice = createSlice({
               isAdmin: action.payload.isAdmin,
               token: action.payload.token,
               // Then, state gets assigned to Local Storage...
-              // I write it this way instead of simply spreading, so I know in the future
-              // Why I did what I did
               tokenExpiration: state.user.tokenExpiration.toString(),
             })
           );
         }
       )
       .addMatcher(
-        // THIS addMATCHER IS HERE TO ENSURE CUSTOM MESSAGES GET
-        // INJECTED INTO DIALOG MODAL!!!
-        // OTHERWISE RTK error will kick in and SINCE I AM DOING
-        // A HYBRID DATA TRANSFER IN THIS VERY PARTICULAR CASE, THATS HOW I NEED IT
-        // IF (WHEN) I USE A DEDICATED ERROR PAGE, I'LL SWITCH BACK TO RTK ERROR OBJECT
         apiSlice.endpoints.credentialLogin.matchRejected,
         (state, action) => {
-          console.log("action.payload credentialLogin"); //test
-          console.log(action.payload); //test  ALLOWS CUSTOM MESSAGING
-          state.error = action.payload.data.message; // CUSTOM
+          state.error = action.payload.data.message;
         }
       )
       .addMatcher(
@@ -109,7 +100,7 @@ const userSlice = createSlice({
       .addMatcher(
         apiSlice.endpoints.googleLogin.matchRejected,
         (state, action) => {
-          state.error = action.payload.data.message; // CUSTOM
+          state.error = action.payload.data.message;
         }
       )
       .addMatcher(
@@ -139,7 +130,7 @@ const userSlice = createSlice({
       .addMatcher(
         apiSlice.endpoints.credentialRegister.matchRejected,
         (state, action) => {
-          state.error = action.payload.data.message; // CUSTOM
+          state.error = action.payload.data.message;
         }
       )
       .addMatcher(
@@ -170,19 +161,19 @@ const userSlice = createSlice({
       .addMatcher(
         apiSlice.endpoints.googleRegister.matchRejected,
         (state, action) => {
-          state.error = action.payload.data.message; // CUSTOM
+          state.error = action.payload.data.message;
         }
       )
       .addMatcher(
         apiSlice.endpoints.passwordResetEmail.matchRejected,
         (state, action) => {
-          state.error = action.payload.data.message; // CUSTOM
+          state.error = action.payload.data.message;
         }
       )
       .addMatcher(
         apiSlice.endpoints.updatePassword.matchRejected,
         (state, action) => {
-          state.error = action.payload.data.message; // CUSTOM
+          state.error = action.payload.data.message;
         }
       );
   },

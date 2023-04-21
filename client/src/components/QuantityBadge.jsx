@@ -5,9 +5,9 @@ import { selectAllItems } from "../redux/cartSlice";
 
 export default function QuantityBadge() {
   const allItems = useSelector(selectAllItems);
-
   // Initialize the state so the server side delay doesn't cause mismatch in hydration
   const [cartItemsCount, setCartItemsCount] = useState(0);
+
   useEffect(() => {
     setCartItemsCount(allItems.reduce((a, c) => a + c.quantity, 0));
   }, [allItems]);
